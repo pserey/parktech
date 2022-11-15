@@ -1,8 +1,9 @@
 module Model.Vaga where
     data Vaga = Vaga {
-        id :: String,
-        isOcupada :: Boolean,
+        isOcupada :: Bool,
         numero :: Int,
         andar :: Int,
-        tempoInicial :: Int
+        tipo :: String,
+        tempoInicial :: Int,
+        id :: String
     } deriving (Show, Read)
