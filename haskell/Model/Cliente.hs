@@ -1,5 +1,5 @@
-module Main.Cliente where
+module Model.Cliente where
     data Cliente = Cliente {
-        id :: String,
+        cpf :: String,
         nome :: String
-    }
+    } deriving (Show, Read)
