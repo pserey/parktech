@@ -10,8 +10,9 @@ addLinha conteudo arquivo = do
     appendFile arquivo conteudoFinal
 
 
--- Função que lê arquivo de nome especificado e retorna uma lista de
--- strings contendo as linhas do arquivo.
+{- | Função que lê arquivo de nome especificado e retorna uma lista de
+strings contendo as linhas do arquivo.
+-}
 readArquivo :: String -> IO [String]
 readArquivo arquivoNome = do
     arquivo <- openFile arquivoNome ReadMode
@@ -26,9 +27,11 @@ findByStr str arquivoNome = do
     findByRecursivo conteudo str
 
 
--- Função recursiva que percorre uma lista de strings (normalmente linhas
--- do arquivo) e procura uma substring especificada.
--- retorna erro caso não ache a substring em nenhuma linha do arquivo.
+{- | Função recursiva que percorre uma lista de strings (normalmente linhas
+do arquivo) e procura uma substring especificada.
+
+Retorna erro caso não ache a substring em nenhuma linha do arquivo.
+-}
 findByRecursivo:: [String] -> String -> IO String
 findByRecursivo [] str = error "Not found"
 findByRecursivo (x:xs) str = do
