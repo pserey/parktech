@@ -67,4 +67,3 @@ opcaomenuCliente opcao
 exit :: IO()
 exit = do
     putStrLn "Encerrando sessão"
-
