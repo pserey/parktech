@@ -1,6 +1,7 @@
 module Database.DatabaseManager where
-import System.IO
-import Data.List
+
+import System.IO ( hGetContents, openFile, IOMode(ReadMode) )
+import Data.List ( isInfixOf )
 
 
 -- Função que adiciona uma string como linha ao arquivo de nome especificado.
