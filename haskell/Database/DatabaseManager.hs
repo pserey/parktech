@@ -3,30 +3,34 @@ import System.IO
 import Data.List
 
 
+-- Função que adiciona uma string como linha ao arquivo de nome especificado.
 addLinha :: String -> String -> IO()
 addLinha conteudo arquivo = do
     let conteudoFinal = conteudo ++ "\n"
     appendFile arquivo conteudoFinal
 
 
-readFile :: String -> IO [String]
-readFile arquivoNome = do
+-- Função que lê arquivo de nome especificado e retorna uma lista de
+-- strings contendo as linhas do arquivo.
+readArquivo :: String -> IO [String]
+readArquivo arquivoNome = do
     arquivo <- openFile arquivoNome ReadMode
     conteudo <- hGetContents arquivo
     return $ lines conteudo
 
 
-findBy :: String -> String -> IO String
-findBy id arquivoNome = do
-    arquivo <- openFile arquivoNome ReadMode
-    conteudo <- hGetContents arquivo
-    let lista = lines conteudo
-    findByRecursivo lista id
+-- Função que procura uma string em um arquivo.
+findByStr :: String -> String -> IO String
+findByStr str arquivoNome = do
+    conteudo <- readArquivo arquivoNome
+    findByRecursivo conteudo str
 
 
-findByRecursivo:: [String] -> String -> String
-findByRecursivo (x:xs) conteudo = do
-    if isInfixOf conteudo x then
-        return x                                       -- TODO: verificar erro de tipo String/Char
-    else do
-        findByRecursivo xs conteudo
+-- Função recursiva que percorre uma lista de strings (normalmente linhas
+-- do arquivo) e procura uma substring especificada.
+-- retorna erro caso não ache a substring em nenhuma linha do arquivo.
+findByRecursivo:: [String] -> String -> IO String
+findByRecursivo [] str = error "Not found"
+findByRecursivo (x:xs) str = do
+    if str `isInfixOf` x then return x
+    else findByRecursivo xs str
