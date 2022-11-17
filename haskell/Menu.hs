@@ -1,15 +1,17 @@
 module Menu where
 
+import Service.VagaService ( adicionaVaga )
+
 menuInicial :: IO()
 menuInicial = do
-putStrLn "\n--- FAÇA LOGIN ---"
-putStrLn "\n1 - Sou cliente"
-putStrLn "\n2 - Sou administrador"
-putStrLn "\n3 - Sair do sistema"
+    putStrLn "\n--- FAÇA LOGIN ---"
+    putStrLn "\n1 - Sou cliente"
+    putStrLn "\n2 - Sou administrador"
+    putStrLn "\n3 - Sair do sistema"
 
-opcao <- getLine
-putStr "\n"
-opcaomenuInicial opcao
+    opcao <- getLine
+    putStr "\n"
+    opcaomenuInicial opcao
 
 
 menuAdministrador :: IO()
@@ -41,10 +43,10 @@ menuCliente = do
 
 opcaomenuInicial :: String -> IO()
 opcaomenuInicial opcao
-| opcao == "1" = menuCliente
-| opcao == "2" = menuAdministrador
-| opcao == "3" = exit
-| otherwise = do putStrLn "Insira um valor válido!\n"
+    | opcao == "1" = menuCliente
+    | opcao == "2" = menuAdministrador
+    | opcao == "3" = exit
+    | otherwise = do putStrLn "Insira um valor válido!\n"
 
 
 opcaomenuAdministrador :: String -> IO()
