@@ -1,0 +1,1 @@
+Vaga {isOcupada = False, numero = 3, andar = 1, tipo = "carro", tempoInicial = 123123214, id = "3-carro-1"}
