@@ -4,6 +4,6 @@ module Model.Vaga where
         numero :: Int,
         andar :: Int,
         tipo :: String,
-        tempoInicial :: Int,
+        tempoInicial :: Integer,
         id :: String
     } deriving (Show, Read)
