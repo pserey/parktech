@@ -1,13 +1,13 @@
-module Service.VagaService ( adicionaVaga ) where
+module Service.VagaService where
 
 import Util.DatabaseManager
-import Model.Vaga as V
+import Model.Vaga
 import Control.Monad ()
 import Data.Time.Clock.POSIX ( getPOSIXTime )
 import Prelude hiding (id)
 
-vagas :: String
-vagas = "app/db/vaga"
+vagasArq :: String
+vagasArq = "app/db/vaga.txt"
 
 -- Função que apresenta menu para adicionar vaga e adiciona em arquivo do andar especificado
 adicionaVaga :: IO ()
@@ -20,20 +20,20 @@ adicionaVaga = do
     andarInput <- getLine
 
     num <- proxNumVaga (read andarInput :: Int)
-    let vId = show num ++ "-" ++ tipoVeiculo ++ "-" ++ andarInput
+    let vId = show (num + 1) ++ "-" ++ tipoVeiculo ++ "-" ++ andarInput
     now <- round `fmap` getPOSIXTime
-
-    let vagasArq = vagas ++ andarInput ++ ".txt"
 
     let vaga = Vaga False (num + 1) (read andarInput :: Int) tipoVeiculo now vId
     addLinha (show vaga) vagasArq
+    -- print $ show vaga
 
 -- Função que retorna o próximo número de vaga achando a última vaga no andar especificado
 proxNumVaga :: Int -> IO Int
-proxNumVaga andar = do
-    -- abre arquivo do andar especifico
-    let vagasArq = vagas ++ show andar ++ ".txt"
+proxNumVaga andarCheck = do
     vagasString <- readArquivo vagasArq -- tratar exception de andar não existir
-    let vagasList = map (read :: String -> Vaga) vagasString
-    let vagasAndar = [s | s <- reverse vagasList, V.andar s == andar]
-    return $ V.numero (head vagasAndar)
+    if null vagasString then return 0
+    else do
+        let vagas = map (read :: String -> Vaga) vagasString
+        let vagasAndar = [s | s <- reverse vagas, andar s == andarCheck]
+        if null vagasAndar then return 0
+        else return (numero $ head vagasAndar)
