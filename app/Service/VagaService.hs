@@ -23,7 +23,7 @@ adicionaVaga = do
 
     let vagasArq = andarRef ++ andar ++ ".txt"
 
-    let vaga = Vaga False (read num) (read andar :: Int) tipoVeiculo now id
+    let vaga = Vaga False (read num + 1) (read andar :: Int) tipoVeiculo now id
     addLinha (show vaga) vagasArq
 
 -- Função que retorna o próximo número de vaga achando a última vaga no andar especificado
