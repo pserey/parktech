@@ -1,4 +1,4 @@
-module Model.Vaga where
+module Model.Vaga ( Vaga(Vaga) ) where
     data Vaga = Vaga {
         isOcupada :: Bool,
         numero :: Int,

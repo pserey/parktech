@@ -1,4 +1,4 @@
-module Model.Veiculo where
+module Model.Veiculo ( Veiculo(Veiculo) ) where
     data Veiculo = Veiculo {
         tipo :: String,
         placa :: String,
