@@ -11,8 +11,10 @@ version:            0.1.0.0
 -- A URL where users can report bugs.
 -- bug-reports:
 license:            NONE
-author:             vandressa.soares
-maintainer:         vandressa.soares@virtus.ufcg.edu.br
+author:             João Henrique Simões Ramalho <>, Lorenna Victória Marinho Lucena <lorenna.lucena@ccc.ufcg.edu.br>,
+                    Pedro René de Lucena Serey <serey.pedro@gmail.com>, Vandressa Galdino Soares <vandressa.soares@ccc.ufcg.edu.br>, 
+                    Wendell Rafael Oliveira Nascimento <wendell.nascimento@ccc.ufcg.edu.br>
+maintainer:         lorenna.lucena@ccc.ufcg.edu.br, serey.pedro@gmail.com, vandressa.soares@virtus.ufcg.edu.br, wendell.nascimento@ccc.ufcg.edu.br
 
 -- A copyright notice.
 -- copyright:
