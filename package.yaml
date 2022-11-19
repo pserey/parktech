@@ -35,6 +35,7 @@ ghc-options:
 - -Wmissing-home-modules
 - -Wpartial-fields
 - -Wredundant-constraints
+- -Wmissing-export-lists
 
 library:
   source-dirs: src
