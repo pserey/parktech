@@ -5,7 +5,7 @@ import Model.Vaga
 import Control.Monad ()
 import Data.Time.Clock.POSIX ( getPOSIXTime )
 
-andarDir = "db/andar"
+andarDir = "app/db/andar"
 
 -- Função que apresenta menu para adicionar vaga e adiciona em arquivo do andar especificado
 adicionaVaga :: IO ()
@@ -18,7 +18,7 @@ adicionaVaga = do
     andarInput <- getLine
 
     num <- proxNumVaga (read andarInput :: Int)
-    let id = show num ++ "-" ++ tipoVeiculo ++ "-" ++ show andarInput
+    let id = num ++ "-" ++ tipoVeiculo ++ "-" ++ andarInput
     now <- round `fmap` getPOSIXTime
 
     let vagasArq = andarDir ++ andarInput ++ ".txt"
