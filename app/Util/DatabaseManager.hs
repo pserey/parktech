@@ -1,4 +1,4 @@
-module Util.DatabaseManager ( addLinha, readArquivo, findByStr, getValor ) where
+module Util.DatabaseManager where
 
 import System.IO ( openFile, IOMode(ReadMode))
 import System.IO.Strict as S
