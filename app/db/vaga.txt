@@ -1,0 +1,3 @@
+Vaga {isOcupada = False, numero = 1, andar = 1, tipo = "carro", tempoInicial = 123123214, id = "1-carro-1"}
+Vaga {isOcupada = False, numero = 2, andar = 1, tipo = "moto", tempoInicial = 1668873042, id = "2-moto-1"}
+Vaga {isOcupada = False, numero = 3, andar = 1, tipo = "carro", tempoInicial = 1668889370, id = "3-carro-1"}

@@ -1,2 +1,0 @@
-Vaga {isOcupada = False, numero = 3, andar = 1, tipo = "carro", tempoInicial = 123123214, id = "3-carro-1"}
-Vaga {isOcupada = False, numero = 6, andar = 1, tipo = "moto", tempoInicial = 1668873042, id = "5-moto-1"}
