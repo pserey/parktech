@@ -1,3 +1,2 @@
-.vscode
-MenuTeste.hs
-dist-newstyle
+.stack-work/
+*~
