@@ -17,8 +17,8 @@
 #
 # resolver: ./custom-snapshot.yaml
 # resolver: https://example.com/snapshots/2018-01-01.yaml
-resolver:
-  url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/0.yaml
+resolver: ghc-9.2.4
+  # url: https://raw.githubusercontent.com/commercialhaskell/stackage-snapshots/master/lts/20/0.yaml
 
 # User packages to be built.
 # Various formats can be used as shown in the example below.
@@ -41,6 +41,20 @@ packages:
 #   commit: e7b331f14bcffb8367cd58fbfc8b40ec7642100a
 #
 # extra-deps: []
+
+extra-deps:
+- strict-0.4.0.1@sha256:d6205a748eb8db4cd17a7179be970c94598809709294ccfa43159c7f3cc4bf5d,4187
+- assoc-1.0.2@sha256:93b8d43aa081e4205116a139f7cf690f608968161d19ebfb23d884d19b082b57,1253
+- hashable-1.4.1.0@sha256:50b2f002c68fe67730ee7a3cd8607486197dd99b084255005ad51ecd6970a41b,5019
+- these-1.1.1.1@sha256:2991c13e264b0c35c696c8f5f85c428c53bc42e93b1dfbd19a582052112d948a,2748
+- bifunctors-5.5.13@sha256:66f1c1d0cba5de9d8810e2ef0be700b98d3689482f605cc46a69283e92a60840,3794
+- tagged-0.8.6.1@sha256:8a24aef29b8e35447ccc56658ea07c2aded30bfa8130ea057e382936e17c74a6,2874
+- base-orphans-0.8.7@sha256:58d5514b688ec037f53b9d60097b9d87f6b3847da68f65124987d67222c3a334,3175
+- comonad-5.0.8@sha256:1f1aabd73ec7f80f20cf078a748a60cd48d8e57277802fdf6a9ab3601a9b8f7e,3631
+- th-abstraction-0.4.5.0@sha256:313f8b3c65781310df66ba86518bcf7662b1b419b601afaf72bb977c255fe6e9,2148
+- distributive-0.6.2.1@sha256:0f99f5541cca04acf89b64432b03422b6408e830a8dff30e6c4334ef1a48680c,2996
+- indexed-traversable-0.1.2@sha256:52a1b708abd921f91a5977f6ae53c4aa2b33f7c30be0fff17173f658b34c5350,2533
+- transformers-compat-0.7.2@sha256:044fb9955f63ee138fcebedfdcbe54afe741f2d5892a2d0bdf3a8052bd342643,5601
 
 # Override default flag values for local packages and extra-deps
 # flags: {}
