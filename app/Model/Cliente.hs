@@ -1,4 +1,4 @@
-module Model.Cliente ( Cliente(Cliente) ) where
+module Model.Cliente where
     data Cliente = Cliente {
         cpf :: String,
         nome :: String

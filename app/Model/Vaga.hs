@@ -1,9 +1,9 @@
-module Model.Vaga ( Vaga(Vaga) ) where
+module Model.Vaga where
     data Vaga = Vaga {
         isOcupada :: Bool,
         numero :: Int,
         andar :: Int,
         tipo :: String,
         tempoInicial :: Integer,
-        id :: String
+        idVaga :: String
     } deriving (Show, Read)
