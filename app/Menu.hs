@@ -45,23 +45,23 @@ opcaomenuInicial :: String -> IO()
 opcaomenuInicial opcao
     | opcao == "1" = menuCliente
     | opcao == "2" = menuAdministrador
-    | opcao == "3" = exit
+    | opcao == "3" = putStrLn "exit"
     | otherwise = do putStrLn "Insira um valor válido!\n"
 
 
 opcaomenuAdministrador :: String -> IO()
 opcaomenuAdministrador opcao
     |opcao == "1" = adicionaVaga
-    |opcao == "2" = adicionaAndar
-    |opcao == "3" = adicionaTempoVaga
+    |opcao == "2" = putStrLn "adicionaAndar"
+    |opcao == "3" = putStrLn "adicionaTempoVaga"
     |opcao == "4" = menuInicial
     |otherwise = do putStrLn "Insira um valor válido!\n"
 
 opcaomenuCliente :: String -> IO()
 opcaomenuCliente opcao
-    |opcao == "1" = estacionaVeiculo
-    |opcao == "2" = pagaEstacionamento
-    |opcao == "3" = listaVagas
+    |opcao == "1" = putStrLn "estacionaVeiculo"
+    |opcao == "2" = putStrLn "pagaEstacionamento"
+    |opcao == "3" = putStrLn "listaVagas"
     |opcao == "4" = menuInicial
     |otherwise = do putStrLn "Insira um valor válido!\n"
     
