@@ -1,7 +1,7 @@
 module Util.DatabaseManager where
 
 import System.IO ( hGetContents, openFile, IOMode(ReadMode, ReadWriteMode), hFlush, hClose, hPutStr )
--- import System.IO.Strict (appendFile)
+import System.IO.Strict as S
 import Data.List ( isInfixOf )
 import Data.Text (pack)
 import Data.Text.Internal.Search (indices)
@@ -11,7 +11,8 @@ import Data.Text.Internal.Search (indices)
 addLinha :: String -> String -> IO()
 addLinha conteudo arquivo = do
     let conteudoFinal = conteudo ++ "\n"
-    appendFile arquivo conteudoFinal
+    meuAppend arquivo conteudoFinal
+    -- appendFile arquivo conteudoFinal
 
 
 {- | Função que lê arquivo de nome especificado e retorna uma lista de
@@ -20,7 +21,7 @@ strings contendo as linhas do arquivo.
 readArquivo :: String -> IO [String]
 readArquivo arquivoNome = do
     arquivo <- openFile arquivoNome ReadMode
-    conteudo <- hGetContents arquivo
+    conteudo <- S.hGetContents arquivo
     return $ lines conteudo
 
 
@@ -68,3 +69,8 @@ getValor chave linha = do
 
     -- let valor = if head valor
     return valor
+
+meuAppend :: String -> String -> IO ()
+meuAppend arquivo conteudo = do
+    arq <- S.readFile arquivo
+    writeFile arquivo (arq ++ conteudo)
