@@ -1,10 +1,12 @@
-module Service.VagaService where
+module Service.VagaService ( adicionaVaga ) where
 
 import Util.DatabaseManager ( addLinha, readArquivo, getValor )
-import Model.Vaga
+import Model.Vaga ( Vaga(Vaga) )
 import Control.Monad ()
 import Data.Time.Clock.POSIX ( getPOSIXTime )
+import Prelude hiding (id)
 
+andarDir :: String
 andarDir = "app/db/andar"
 
 -- Função que apresenta menu para adicionar vaga e adiciona em arquivo do andar especificado

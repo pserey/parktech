@@ -1,4 +1,4 @@
-module Menu where
+module Menu ( menuInicial, exit ) where
 
 import Service.VagaService ( adicionaVaga )
 

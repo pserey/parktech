@@ -1,10 +1,10 @@
-module Util.DatabaseManager where
+module Util.DatabaseManager ( addLinha, readArquivo, findByStr, getValor ) where
 
-import System.IO ( hGetContents, openFile, IOMode(ReadMode, ReadWriteMode), hFlush, hClose, hPutStr )
+import System.IO ( openFile, IOMode(ReadMode))
 import System.IO.Strict as S
 import Data.List ( isInfixOf )
-import Data.Text (pack)
-import Data.Text.Internal.Search (indices)
+import Data.Text ( pack )
+import Data.Text.Internal.Search ( indices )
 
 
 -- Função que adiciona uma string como linha ao arquivo de nome especificado.
@@ -46,6 +46,8 @@ findByRecursivo (x:xs) str = do
 
 -- função que busca um valor em uma string em formato de Show Object
 -- retorna o valor com "" se for string e sem se for inteiro
+-- TODO: implementar split
+-- TODO: resolver "" em retorno de strings
 getValor :: String -> String -> IO String
 getValor chave linha = do
     -- acha indice do nome do objeto e remove nome da string

@@ -1,6 +1,6 @@
-module Main where
+module Main ( main ) where
 
-import Menu
+import Menu ( menuInicial )
 
 main :: IO()
 main = do
