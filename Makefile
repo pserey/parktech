@@ -1,2 +1,5 @@
-run:
-	cabal run parktech
+run: build
+	stack exec parktech-exe
+
+build:
+	stack build parktech

@@ -1,34 +1,76 @@
-cabal-version:      2.4
-name:               parktech
-version:            0.1.0.0
+cabal-version: 1.12
 
--- A short (one-line) description of the package.
--- synopsis:
+-- This file has been generated from package.yaml by hpack version 0.35.0.
+--
+-- see: https://github.com/sol/hpack
 
--- A longer description of the package.
--- description:
+name:           parktech
+version:        0.1.0.0
+description:    Please see the README on GitHub at <https://github.com/githubuser/parktech#readme>
+homepage:       https://github.com/githubuser/parktech#readme
+bug-reports:    https://github.com/githubuser/parktech/issues
+author:         Author name here
+maintainer:     example@example.com
+copyright:      2022 Author name here
+license:        BSD3
+license-file:   LICENSE
+build-type:     Simple
+extra-source-files:
+    README.md
+    CHANGELOG.md
 
--- A URL where users can report bugs.
--- bug-reports:
-license:            NONE
-author:             João Henrique Simões Ramalho <>, Lorenna Victória Marinho Lucena <lorenna.lucena@ccc.ufcg.edu.br>,
-                    Pedro René de Lucena Serey <serey.pedro@gmail.com>, Vandressa Galdino Soares <vandressa.soares@ccc.ufcg.edu.br>, 
-                    Wendell Rafael Oliveira Nascimento <wendell.nascimento@ccc.ufcg.edu.br>
-maintainer:         lorenna.lucena@ccc.ufcg.edu.br, serey.pedro@gmail.com, vandressa.soares@virtus.ufcg.edu.br, wendell.nascimento@ccc.ufcg.edu.br
+source-repository head
+  type: git
+  location: https://github.com/githubuser/parktech
 
--- A copyright notice.
--- copyright:
--- category:
-extra-source-files: CHANGELOG.md
+library
+  exposed-modules:
+      Lib
+  other-modules:
+      Paths_parktech
+  hs-source-dirs:
+      src
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints
+  build-depends:
+      base >=4.7 && <5
+    , strict
+    , text
+    , time
+  default-language: Haskell2010
 
-executable parktech
-    main-is:          Main.hs
+executable parktech-exe
+  main-is: Main.hs
+  other-modules:
+      Menu
+      Model.Cliente
+      Model.Vaga
+      Model.Veiculo
+      Service.VagaService
+      Util.DatabaseManager
+      Paths_parktech
+  hs-source-dirs:
+      app
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , parktech
+    , strict
+    , text
+    , time
+  default-language: Haskell2010
 
-    -- Modules included in this executable, other than Main.
-    -- other-modules:
-
-    -- LANGUAGE extensions used by modules in this package.
-    -- other-extensions:
-    build-depends:    base ^>=4.16.3.0, strict ^>=0.4.0.1
-    hs-source-dirs:   app
-    default-language: Haskell2010
+test-suite parktech-test
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Paths_parktech
+  hs-source-dirs:
+      test
+  ghc-options: -Wall -Wcompat -Widentities -Wincomplete-record-updates -Wincomplete-uni-patterns -Wmissing-export-lists -Wmissing-home-modules -Wpartial-fields -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  build-depends:
+      base >=4.7 && <5
+    , parktech
+    , strict
+    , text
+    , time
+  default-language: Haskell2010

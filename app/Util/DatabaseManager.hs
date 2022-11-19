@@ -1,4 +1,4 @@
-module Database.DatabaseManager where
+module Util.DatabaseManager where
 
 import System.IO ( hGetContents, openFile, IOMode(ReadMode, ReadWriteMode), hFlush, hClose, hPutStr )
 -- import System.IO.Strict (appendFile)
