@@ -2,6 +2,7 @@ module Menu ( menuInicial, exit ) where
 
 import Service.VagaService ( adicionaVaga )
 import Service.VagaService ( vagasDisponiveis )
+import Service.VagaService ( vagasDisponiveisAndar )
 
 menuInicial :: IO()
 menuInicial = do
@@ -35,7 +36,8 @@ menuCliente = do
     putStrLn "\n1 - Estacionar veiculo"
     putStrLn "\n2 - Pagar estacionamento"
     putStrLn "\n3 - Ver vagas disponiveis"
-    putStrLn "\n4 - Voltar para o menu inicial"
+    putStrLn "\n4 - Ver vagas disponiveis por andar"
+    putStrLn "\n5 - Voltar para o menu inicial"
 
     opcao <- getLine
     putStr "\n"
@@ -63,7 +65,8 @@ opcaomenuCliente opcao
     |opcao == "1" = putStrLn "estacionaVeiculo"
     |opcao == "2" = putStrLn "pagaEstacionamento"
     |opcao == "3" = vagasDisponiveis
-    |opcao == "4" = menuInicial
+    |opcao == "4" = vagasDisponiveisAndar
+    |opcao == "5" = menuInicial
     |otherwise = do putStrLn "Insira um valor válido!\n"
     
 exit :: IO()
