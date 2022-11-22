@@ -37,3 +37,17 @@ proxNumVaga andarCheck = do
         let vagasAndar = [s | s <- reverse vagas, andar s == andarCheck]
         if null vagasAndar then return 0
         else return (numero $ head vagasAndar)
+
+-- Função que contabiliza a quantidade de vagas disponíveis
+vagasDisponiveis :: IO()
+vagasDisponiveis = do
+    vagasString <- readArquivo vagasArq
+    let vagas = map (read :: String -> Vaga) vagasString
+    print $ show(length (vagasStatus vagas "carro")) ++ " vaga(s) disponivel(is) para carros"
+    print $ show(length (vagasStatus vagas "moto")) ++ " vaga(s) disponivel(is) para motos"
+    print $ show(length (vagasStatus vagas "van")) ++ " vaga(s) disponivel(is) para vans"
+
+-- Função que retorna uma lista de vagas disponíveis para um tipo específico de veículo
+vagasStatus :: [Vaga] -> String -> [Vaga]
+vagasStatus vagas tipoVeiculo = [s | s <- reverse vagas, isOcupada s == False && tipo s == tipoVeiculo]
+    
