@@ -49,14 +49,14 @@ vagasDisponiveis = do
 
 -- Função que retorna uma lista de vagas disponíveis para um tipo específico de veículo
 vagasStatus :: [Vaga] -> String -> [Vaga]
-vagasStatus vagas tipoVeiculo = [s | s <- reverse vagas, isOcupada s == False && tipo s == tipoVeiculo]
+vagasStatus vagas tipoVeiculo = [s | s <- reverse vagas, not (isOcupada s) && tipo s == tipoVeiculo]
     
 -- Função que contabiliza a quantidade de vagas disponíveis por andar
 vagasDisponiveisAndar :: IO()
 vagasDisponiveisAndar = do
     putStrLn "Indique o andar que deseja consultar a disponíbilidade de vagas: "
     a <- readLn :: IO Int
-    
+
     vagasString <- readArquivo vagasArq
     let vagas = map (read :: String -> Vaga) vagasString
     print $ show(length([s | s <- reverse (vagasStatus vagas "carro"), andar s == a])) ++ " vaga(s) disponivel(is) para carros no andar " ++ show(a)
