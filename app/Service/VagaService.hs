@@ -43,9 +43,9 @@ vagasDisponiveis :: IO()
 vagasDisponiveis = do
     vagasString <- readArquivo vagasArq
     let vagas = map (read :: String -> Vaga) vagasString
-    print $ show(length (vagasStatus vagas "carro")) ++ " vaga(s) disponivel(is) para carros"
-    print $ show(length (vagasStatus vagas "moto")) ++ " vaga(s) disponivel(is) para motos"
-    print $ show(length (vagasStatus vagas "van")) ++ " vaga(s) disponivel(is) para vans"
+    putStrLn $ show(length (vagasStatus vagas "carro")) ++ " vaga(s) disponivel(is) para carros"
+    putStrLn $ show(length (vagasStatus vagas "moto")) ++ " vaga(s) disponivel(is) para motos"
+    putStrLn $ show(length (vagasStatus vagas "van")) ++ " vaga(s) disponivel(is) para vans"
 
 -- Função que retorna uma lista de vagas disponíveis para um tipo específico de veículo
 vagasStatus :: [Vaga] -> String -> [Vaga]
