@@ -45,6 +45,7 @@ executable parktech-exe
       Model.Cliente
       Model.Vaga
       Model.Veiculo
+      Service.EstacionamentoService
       Service.VagaService
       Util.DatabaseManager
       Paths_parktech
