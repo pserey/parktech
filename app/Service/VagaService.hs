@@ -63,31 +63,32 @@ vagasDisponiveisAndar = do
     print $ show(length([s | s <- reverse (vagasStatus vagas "moto"), andar s == a])) ++ " vaga(s) disponivel(is) para motos no andar " ++ show(a)
     print $ show(length([s | s <- reverse (vagasStatus vagas "van"), andar s == a])) ++ " vaga(s) disponivel(is) para vans no andar " ++ show(a)
 
-    -- Função que modifica o tempo inicial de uma vaga
+  -- Função que modifica o tempo inicial de uma vaga
 setTempoVagaTeste :: Int -> Int -> IO ()
 setTempoVagaTeste numeroVaga novoTempoInicial = do
-    vagasString <- readArquivo vagasArq
-    vaga <- getVagaByNumero numeroVaga
-    let vagaStr = show vaga
-    let vagaStr2 = show vaga
-    let tempoVaga = show (tempoInicial vaga)
-    let novoTempo = show novoTempoInicial
-    let novaLinha = replace vagaStr tempoVaga novoTempo
-    let listaVaga = replace vagasString [vagaStr2] [novaLinha]
-    let vagas = map (read :: String -> Vaga) listaVaga
-    updateByContent vagasArq vagas
-    
---- funcao que faz o replace 
+  vagasString <- readArquivo vagasArq
+  vaga <- getVagaByNumero numeroVaga
+  let novaLinha = replace (show vaga) (show (tempoInicial vaga)) (show novoTempoInicial)
+  let listaVaga = replace vagasString [show vaga] [novaLinha]
+  let vagas = map (read :: String -> Vaga) listaVaga
+  updateByContent vagasArq vagas
+
+--- funcao que faz o replace
 replace :: Eq a => [a] -> [a] -> [a] -> [a]
 replace [] _ _ = []
 replace s find repl =
-    if take (length find) s == find
-    then repl ++ (replace (drop (length find) s) find repl)
-    else [head s] ++ (replace (tail s) find repl)
+  if take (length find) s == find
+    then repl ++ replace (drop (length find) s) find repl
+    else [head s] ++ replace (tail s) find repl
 
+    --- funcao que retorna uma vaga a partir do id
 getVagaByNumero :: Int -> IO Vaga
 getVagaByNumero numeroVaga = do
-    vagasString <- readArquivo vagasArq
-    let vagas = map (read :: String -> Vaga) vagasString
-    let vaga = [s | s <- reverse vagas, numero s == numeroVaga]
-    return $ head vaga -- p precisa tratar essa exceção
+  vagasString <- readArquivo vagasArq
+  let vagas = map (read :: String -> Vaga) vagasString
+  let vaga = [s | s <- reverse vagas, numero s == numeroVaga]
+  if null vaga
+    then error "A vaga buscada nao foi encontrada"
+    else return $ head vaga
+
+

@@ -1,11 +1,11 @@
 module Util.DatabaseManager where
 
-import System.IO ( openFile, IOMode(ReadMode))
+import Data.List (isInfixOf)
+import Data.Text (pack)
+import Data.Text.Internal.Search (indices)
+import System.IO
 import System.IO.Strict as S
-import Data.List ( isInfixOf )
-import Data.Text ( pack )
-import Data.Text.Internal.Search ( indices )
-
+import Model.Vaga
 
 -- Função que adiciona uma string como linha ao arquivo de nome especificado.
 addLinha :: String -> String -> IO()
@@ -91,3 +91,9 @@ updateByContentRecursivo (model:modelTail) fileHandle = do
     let linha = show(model)
     hPutStrLn fileHandle linha
     updateByContentRecursivo modelTail fileHandle
+
+-- Função que checa se um objeto em string (show) está dentro de um arquivo especifico
+checkIfExist :: String -> String -> IO Bool
+checkIfExist line arq = do
+  linhas <- S.readFile arq
+  return $ line `isInfixOf` linhas
