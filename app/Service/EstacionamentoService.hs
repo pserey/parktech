@@ -17,7 +17,7 @@ horas dataFinal dataInicial = do
     let date2 =  round dataInicial
     return (date1 - date2)
 
-taxaPagamento :: Vaga -> Bool -> IO Float
+taxaPagamento :: Vaga -> Bool -> IO Double
 taxaPagamento vaga iSDiaSemana = do
     current <- date
     let dataFinal = fromIntegral (current)
@@ -27,9 +27,9 @@ taxaPagamento vaga iSDiaSemana = do
     if tipo vaga == "carro" then do
         if (dataFinal - dataInicial) > 7200 then do
             if iSDiaSemana then do
-                return (6 + (((d / 3600)-1)*1.5))
+                return (6 + (((d / 3600)-2)*1.5))
             else
-                return (8 + (((d /3600)-1)*2))
+                return (8 + (((d /3600)-2)*2))
         else
             if iSDiaSemana then return 6 
             else return 8
@@ -37,9 +37,9 @@ taxaPagamento vaga iSDiaSemana = do
     else if tipo vaga == "moto" then do
         if (dataFinal - dataInicial)  > 7200 then do
             if iSDiaSemana then do
-                return (4 + ((d /3600)-1))
+                return (4 + ((d /3600)-2))
             else
-                return (6 + (((d /3600)-1)*1.5))
+                return (6 + (((d /3600)-2)*1.5))
         else
             if iSDiaSemana then return 4 
             else return 6
@@ -47,9 +47,9 @@ taxaPagamento vaga iSDiaSemana = do
     else
         if (dataFinal - dataInicial)  > 7200 then do
             if iSDiaSemana then do
-                return (8 + (((d/3600)-1)*2))
+                return (8 + (((d/3600)-2)*2))
             else
-                return (10 + (((d /3600)-1)*2.5))
+                return (10 + (((d /3600)-2)*2.5))
         else
             if iSDiaSemana then return 8 
             else return 10
