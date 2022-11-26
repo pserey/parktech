@@ -76,3 +76,18 @@ meuAppend :: String -> String -> IO ()
 meuAppend arquivo conteudo = do
     arq <- S.readFile arquivo
     writeFile arquivo (arq ++ conteudo)
+
+
+updateByContent :: String -> [Vaga] -> IO ()
+updateByContent arquivoNome  modelUpdate = do
+    fileHandle <- openFile arquivoNome WriteMode
+    updateByContentRecursivo modelUpdate fileHandle
+    hFlush fileHandle
+    hClose fileHandle
+
+updateByContentRecursivo :: [Vaga] -> Handle -> IO ()
+updateByContentRecursivo [] _ = return ()
+updateByContentRecursivo (model:modelTail) fileHandle = do
+    let linha = show(model)
+    hPutStrLn fileHandle linha
+    updateByContentRecursivo modelTail fileHandle
