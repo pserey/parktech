@@ -5,5 +5,6 @@ module Model.Vaga where
         andar :: Int,
         tipo :: String,
         tempoInicial :: Integer,
-        idVaga :: String
+        idVaga :: String,
+        placaVeiculo :: String
     } deriving (Show, Read)
