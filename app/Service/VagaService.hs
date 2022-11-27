@@ -19,12 +19,16 @@ adicionaVaga = do
   putStrLn "Andar: "
   andarInput <- getLine
 
-  num <- proxNumVaga (read andarInput :: Int)
-  let vId = show (num + 1) ++ "-" ++ tipoVeiculo ++ "-" ++ andarInput
-  now <- round `fmap` getPOSIXTime
+  vagasAndar <- calculaVagaAndar (read andarInput :: Int)
+  if vagasAndar < 20 then do
+    num <- proxNumVaga (read andarInput :: Int)
+    let vId = show (num + 1) ++ "-" ++ tipoVeiculo ++ "-" ++ andarInput
+    now <- round `fmap` getPOSIXTime
 
-  let vaga = Vaga False (num + 1) (read andarInput :: Int) tipoVeiculo now vId ""
-  addLinha (show vaga) vagasArq
+    let vaga = Vaga False (num + 1) (read andarInput :: Int) tipoVeiculo now vId ""
+    addLinha (show vaga) vagasArq
+  else
+    print "Numero máximo de vagas atingido"
 
 -- print $ show vaga
 
@@ -53,6 +57,13 @@ vagasDisponiveis = do
 -- Função que retorna uma lista de vagas disponíveis para um tipo específico de veículo
 vagasStatus :: [Vaga] -> String -> [Vaga]
 vagasStatus vagas tipoVeiculo = [s | s <- reverse vagas, not (isOcupada s) && tipo s == tipoVeiculo]
+
+calculaVagaAndar :: Int -> IO Int
+calculaVagaAndar numAndar = do
+  vagasString <- readArquivo vagasArq
+  let vagas = map (read :: String -> Vaga) vagasString
+  return (length [s | s <- vagas, andar s == numAndar])
+
 
 -- Função que contabiliza a quantidade de vagas disponíveis por andar
 vagasDisponiveisAndar :: IO ()
