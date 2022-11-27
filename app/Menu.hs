@@ -1,8 +1,7 @@
 module Menu ( menuInicial, exit ) where
 
-import Service.VagaService ( adicionaVaga )
-import Service.VagaService ( vagasDisponiveis )
-import Service.VagaService ( vagasDisponiveisAndar )
+import Service.VagaService
+import Service.EstacionamentoService
 
 menuInicial :: IO()
 menuInicial = do
@@ -48,7 +47,7 @@ opcaomenuInicial :: String -> IO()
 opcaomenuInicial opcao
     | opcao == "1" = menuCliente
     | opcao == "2" = menuAdministrador
-    | opcao == "3" = putStrLn "exit"
+    | opcao == "3" = exit
     | otherwise = do putStrLn "Insira um valor válido!\n"
 
 
@@ -63,7 +62,7 @@ opcaomenuAdministrador opcao
 opcaomenuCliente :: String -> IO()
 opcaomenuCliente opcao
     |opcao == "1" = putStrLn "estacionaVeiculo"
-    |opcao == "2" = putStrLn "pagaEstacionamento"
+    |opcao == "2" = pagaEstacionamento
     |opcao == "3" = vagasDisponiveis
     |opcao == "4" = vagasDisponiveisAndar
     |opcao == "5" = menuInicial
