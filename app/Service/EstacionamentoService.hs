@@ -58,13 +58,29 @@ taxaPagamento vaga iSDiaSemana = do
 arredonda :: Double -> Double
 arredonda x = (fromIntegral (floor (x * (10 ^ 2)))) / (10 ^ 2)
 
-pagaEstacionamento :: Int -> Double -> Bool -> IO ()
-pagaEstacionamento numeroVaga valorPago isDiaSemana = do
-  vagasString <- readArquivo vagasArq
+convertBool:: String -> Bool
+convertBool s
+    |s == "S" = True
+    |s == "N" = False
+    |otherwise = error "valor passado invalido"
+
+pagaEstacionamento :: IO ()
+pagaEstacionamento = do
+  putStrLn "--- PAGAMENTO ---"
+
+  putStrLn "Digite o numero da sua vaga: "
+  numeroVaga <- readLn :: IO Int
+  putStrLn "Hoje é dia comercial?(S/N) "
+  isDiaSemana <- getLine
   vaga <- getVagaByNumero numeroVaga
-  taxa <- taxaPagamento vaga isDiaSemana
+  taxa <- taxaPagamento vaga (convertBool isDiaSemana)
+
+  vagasString <- readArquivo vagasArq
   if isOcupada vaga
     then do
+      print ("O preco final eh R$ " ++ show(arredonda taxa))
+      putStrLn "Faça seu pagamento: "
+      valorPago <- readLn :: IO Double
       if arredonda taxa == valorPago
         then do
           let novaLinha = replace (show vaga) (show (isOcupada vaga)) "False"
