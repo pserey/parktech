@@ -1,12 +1,13 @@
-{-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-{-# HLINT ignore "Use <&>" #-}
 module Service.EstacionamentoService where
 
 import Control.Monad ()
-import Model.Vaga (tipo, tempoInicial, Vaga())
-import Util.DatabaseManager ()
+import Model.Vaga
+import Util.DatabaseManager 
+import Service.VagaService hiding (vagasArq)
 import Data.Time.Clock.POSIX ( getPOSIXTime )
 
+vagasArq :: String
+vagasArq = "app/db/vaga.txt"
 
 date :: IO  Integer
 date = round `fmap` getPOSIXTime
@@ -53,3 +54,31 @@ taxaPagamento vaga iSDiaSemana = do
         else
             if iSDiaSemana then return 8 
             else return 10
+
+arredonda :: Double -> Double
+arredonda x = (fromIntegral (floor (x * (10 ^ 2)))) / (10 ^ 2)
+
+pagaEstacionamento :: Int -> Double -> Bool -> IO ()
+pagaEstacionamento numeroVaga valorPago isDiaSemana = do
+  vagasString <- readArquivo vagasArq
+  vaga <- getVagaByNumero numeroVaga
+  taxa <- taxaPagamento vaga isDiaSemana
+  if isOcupada vaga
+    then do
+      if arredonda taxa == valorPago
+        then do
+          let novaLinha = replace (show vaga) (show (isOcupada vaga)) "False"
+          let listaVaga = replace vagasString [show vaga] [novaLinha]
+          let vagas = map (read :: String -> Vaga) listaVaga
+          updateByContent vagasArq vagas
+          print "Estacionamento pago com sucesso"
+        else
+          if arredonda taxa < valorPago
+            then do
+              let novaLinha = replace (show vaga) (show (isOcupada vaga)) "False"
+              let listaVaga = replace vagasString [show vaga] [novaLinha]
+              let vagas = map (read :: String -> Vaga) listaVaga
+              updateByContent vagasArq vagas
+              print ("Estacionamento pago com sucesso, seu troco eh de " ++ show (valorPago - arredonda (taxa)) ++ "reais")
+            else print ("Estacionamento nao foi pago. Valor da taxa (" ++ show (arredonda taxa) ++ ") eh maior que o valor pago")
+    else print "A vaga nao esta ocupada, falha ao realizar o pagamento"
