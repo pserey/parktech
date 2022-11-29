@@ -1,8 +1,10 @@
 module Service.EstacionamentoService where
 
 import Control.Monad ()
-import Model.Vaga as V
+import Model.Vaga as Va
 import Model.Veiculo as Ve
+import Model.Cliente as C
+import Model.Historico as H
 import Util.DatabaseManager 
 import Service.VagaService
 import Service.ClienteService
@@ -25,7 +27,7 @@ taxaPagamento vaga iSDiaSemana = do
     let dataInicial = fromIntegral (tempoInicial vaga) 
     diferenca <- horas dataFinal dataInicial
     let d = fromIntegral diferenca
-    if V.tipo vaga == "carro" then do
+    if Va.tipo vaga == "carro" then do
         if (dataFinal - dataInicial) > 7200 then do
             if iSDiaSemana then do
                 return (6 + (((d / 3600)-2)*1.5))
@@ -35,7 +37,7 @@ taxaPagamento vaga iSDiaSemana = do
             if iSDiaSemana then return 6 
             else return 8
 
-    else if V.tipo vaga == "moto" then do
+    else if Va.tipo vaga == "moto" then do
         if (dataFinal - dataInicial)  > 7200 then do
             if iSDiaSemana then do
                 return (4 + ((d /3600)-2))
@@ -107,7 +109,7 @@ estacionaVeiculo = do
     putStrLn "Insira seu CPF: "
     cpfCliente <- getLine
     
-    -- recomenda vaga
+    -- TODO: chamar recomenda vaga
     
     statusCadastroCliente <- verificaCliente cpfCliente
     if statusCadastroCliente then do
@@ -138,9 +140,9 @@ verificaDisponibilidadeVaga veiculoCliente cpfCliente = do
 
     vagaEscolhida <- getVagaByNumero vagaEstacionamento andarEstacionamento
     
-    if Ve.tipo veiculoCliente == V.tipo vagaEscolhida then do
+    if Ve.tipo veiculoCliente == Va.tipo vagaEscolhida then do
         if not $ isOcupada vagaEscolhida then do
-            estaciona cpfCliente (placa veiculoCliente) vagaEstacionamento andarEstacionamento
+            estaciona cpfCliente (placa veiculoCliente) vagaEscolhida
             print "Veiculo estacionado"
         else do
             vagasString <- readArquivo vagasArq
@@ -152,7 +154,7 @@ verificaDisponibilidadeVaga veiculoCliente cpfCliente = do
                 print "Deseja estacionar nessa vaga? (s/n)"
                 opcao <- getLine
                 if opcao == "s" then do
-                    estaciona cpfCliente (placa veiculoCliente) vagaEstacionamento andarEstacionamento
+                    estaciona cpfCliente (placa veiculoCliente) (head vagasLivres)
                     print "Veiculo estacionado"
                 else verificaDisponibilidadeVaga veiculoCliente cpfCliente  
             else 
@@ -163,6 +165,29 @@ verificaDisponibilidadeVaga veiculoCliente cpfCliente = do
 
 -- estaciona :: cpfcliente -> placaVeiculo -> numeroVaga -> numeroAndar
 -- alterar vaga --- isOcupada = true, placaVeiculo = pv, tempoInicial = posix
-estaciona :: String -> String -> Int -> Int -> IO()
-estaciona cpfCliente placaVeiculo numeroVaga numeroAndar = do
-    print "deu certo!!!!!!!!!!!!!!" 
+estaciona :: String -> String -> Vaga -> IO()
+estaciona cpfCliente placaVeiculoEstacionado vagaEscolhida = do
+    -- adiciona placaVeiuclo em vaga no bd e seta tempo de agora
+    -- FIXME: algum erro de read deleta db de vagas inteiro
+    now <- date
+    -- atualiza tempo inicial de vaga
+    updateDb (show vagaEscolhida) (show (Va.tempoInicial vagaEscolhida)) (show now) vagasArq
+    -- atualiza placa de veiculo de vaga
+    vagaAtualizadaTempo <- getVagaByNumero (Va.numero vagaEscolhida) (Va.andar vagaEscolhida)
+    updateDb (show vagaAtualizadaTempo) (show (Va.placaVeiculo vagaAtualizadaTempo)) (show placaVeiculoEstacionado) vagasArq
+    -- adiciona vaga em histórico de cliente
+    registraHistorico cpfCliente vagaEscolhida
+
+registraHistorico :: String -> Vaga -> IO ()
+registraHistorico cpfCliente vagaEscolhida = do
+    historicos <- getHistoricoByCpf cpfCliente
+    if null historicos then do -- cria histórico de cliente se não houver
+        let historico = Historico cpfCliente [vagaEscolhida]
+        addLinha (show historico) historicosArq
+    else do -- senão, atualiza histórico
+        historicosString <- readArquivo historicosArq
+        let historicoCliente = head historicos
+        let historicoAtualizado = Historico (H.clienteCpf historicoCliente) (H.numVagas historicoCliente ++ [vagaEscolhida])
+        let historicosStringAtualizado = replace historicosString [show historicoCliente] [show historicoAtualizado]
+        -- updateByContent historicosArq historicosAtualizados
+        writeFileFromList historicosArq historicosStringAtualizado
