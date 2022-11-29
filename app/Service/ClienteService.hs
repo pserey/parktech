@@ -20,8 +20,16 @@ criaCliente = do
     putStrLn "Dê os dados do cliente a ser adicionado: "
     putStrLn "cpf: "
     cpf <- getLine
-    putStrLn "nome "
+    putStrLn "nome: "
     nome <- getLine
+    putStrLn "Gostaria que seu historico ficasse salvo? "
+    aceita <- getLine
 
-    let cliente = Cliente cpf nome
-    addLinha (show cliente) clienteArq
+    if aceita == "sim"  then do
+        let cliente = Cliente cpf nome True
+        addLinha (show cliente) clienteArq
+    else do
+        let cliente = Cliente cpf nome False
+        addLinha (show cliente) clienteArq
+
+
