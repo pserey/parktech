@@ -3,6 +3,7 @@ module Util.DatabaseManager where
 import Data.List (isInfixOf)
 import Data.Text (pack)
 import Data.Text.Internal.Search (indices)
+import Data.List (intercalate)
 import System.IO
 import System.IO.Strict as S
 import Model.Vaga
@@ -110,3 +111,26 @@ replace s find repl =
   if take (length find) s == find
     then repl ++ replace (drop (length find) s) find repl
     else head s : replace (tail s) find repl
+
+-- função que atualiza arquivo com lista de objetos
+-- converte objetos com show e cria um novo arquivo separado por linhas
+-- FIXME: banco de dados é repopulado com strings erradas "" ao redor de toda linha
+writeFileFromList :: String -> [String] -> IO ()
+writeFileFromList nomeArquivo conteudos = do
+    let dbString = intercalate "\n" conteudos
+    writeFile nomeArquivo dbString
+
+-- função que substitui elemento em linha do db usando replace
+updateDb :: String -> String -> String -> String -> IO ()
+updateDb linha elemento elementoNovo nomeArq = do
+    db <- S.readFile nomeArq
+
+    -- atualiza elemento em linha
+    let linhaAtualizada = replace linha elemento elementoNovo
+    -- atualiza linha em db
+    -- S.readFile retorna toda \ com \\ na frente, impossibilitando que read :: Vaga funcione, por isso se usa replace para isso também
+    let dbAtualizado = replace db linha linhaAtualizada
+
+    -- reescreve db
+    writeFile nomeArq dbAtualizado
+    -- writeFileFromList nomeArq dbAtualizado
