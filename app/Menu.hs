@@ -55,13 +55,13 @@ opcaomenuAdministrador :: String -> IO()
 opcaomenuAdministrador opcao
     |opcao == "1" = adicionaVaga
     |opcao == "2" = putStrLn "adicionaAndar"
-    |opcao == "3" = putStrLn "adicionaTempoVaga"
+    |opcao == "3" = putStrLn "adicionaTempoVaga" -- TODO: falta fazer o menu na função
     |opcao == "4" = menuInicial
     |otherwise = do putStrLn "Insira um valor válido!\n"
 
 opcaomenuCliente :: String -> IO()
 opcaomenuCliente opcao
-    |opcao == "1" = putStrLn "estacionaVeiculo"
+    |opcao == "1" = estacionaVeiculo
     |opcao == "2" = pagaEstacionamento
     |opcao == "3" = vagasDisponiveis
     |opcao == "4" = vagasDisponiveisAndar
