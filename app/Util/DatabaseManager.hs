@@ -79,15 +79,15 @@ meuAppend arquivo conteudo = do
     writeFile arquivo (arq ++ conteudo)
 
 
-updateByContent :: String -> [Vaga] -> IO ()
-updateByContent arquivoNome  modelUpdate = do
+updateByContent :: Show t => String -> [t] -> IO ()
+updateByContent arquivoNome modelUpdate = do
     fileHandle <- openFile arquivoNome WriteMode
     updateByContentRecursivo modelUpdate fileHandle
     hFlush fileHandle
     hClose fileHandle
 
 
-updateByContentRecursivo :: [Vaga] -> Handle -> IO ()
+updateByContentRecursivo :: Show t => [t] -> Handle -> IO ()
 updateByContentRecursivo [] _ = return ()
 updateByContentRecursivo (model:modelTail) fileHandle = do
     let linha = show model
@@ -102,7 +102,8 @@ checkIfExist line arq = do
   return $ line `isInfixOf` linhas
 
 
---- funcao que faz o replace
+-- funcao que faz o replace
+-- recebe: estrutura que será alterada -> valor existente -> valor novo
 replace :: Eq a => [a] -> [a] -> [a] -> [a]
 replace [] _ _ = []
 replace s find repl =
