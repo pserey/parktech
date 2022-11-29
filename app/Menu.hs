@@ -14,6 +14,9 @@ menuInicial = do
     putStr "\n"
     opcaomenuInicial opcao
 
+    if  opcao /= "3" then menuInicial
+    else exit
+
 
 menuAdministrador :: IO()
 menuAdministrador = do
@@ -47,7 +50,7 @@ opcaomenuInicial :: String -> IO()
 opcaomenuInicial opcao
     | opcao == "1" = menuCliente
     | opcao == "2" = menuAdministrador
-    | opcao == "3" = exit
+    | opcao == "3" = putStrLn "Sistema fechando"
     | otherwise = do putStrLn "Insira um valor válido!\n"
 
 
@@ -57,7 +60,9 @@ opcaomenuAdministrador opcao
     |opcao == "2" = putStrLn "adicionaAndar"
     |opcao == "3" = putStrLn "adicionaTempoVaga" -- TODO: falta fazer o menu na função
     |opcao == "4" = menuInicial
-    |otherwise = do putStrLn "Insira um valor válido!\n"
+    |otherwise = do 
+        putStrLn "Insira um valor válido!\n"
+        menuAdministrador
 
 opcaomenuCliente :: String -> IO()
 opcaomenuCliente opcao
@@ -66,7 +71,9 @@ opcaomenuCliente opcao
     |opcao == "3" = vagasDisponiveis
     |opcao == "4" = vagasDisponiveisAndar
     |opcao == "5" = menuInicial
-    |otherwise = do putStrLn "Insira um valor válido!\n"
+    |otherwise = do 
+        putStrLn "Insira um valor válido!\n"
+        menuCliente
     
 exit :: IO()
 exit = do
