@@ -21,10 +21,10 @@ horas dataFinal dataInicial = do
 taxaPagamento :: Vaga -> Bool -> IO Double
 taxaPagamento vaga iSDiaSemana = do
     current <- date
-    let dataFinal = fromIntegral (current)
+    let dataFinal = fromIntegral current
     let dataInicial = fromIntegral (tempoInicial vaga) 
     diferenca <- horas dataFinal dataInicial
-    let d = fromIntegral(diferenca)
+    let d = fromIntegral diferenca
     if V.tipo vaga == "carro" then do
         if (dataFinal - dataInicial) > 7200 then do
             if iSDiaSemana then do
@@ -56,7 +56,7 @@ taxaPagamento vaga iSDiaSemana = do
             else return 10
 
 arredonda :: Double -> Double
-arredonda x = (fromIntegral (floor (x * (10 ^ 2)))) / (10 ^ 2)
+arredonda x = fromIntegral (floor (x * (10 ^ 2))) / (10 ^ 2)
 
 convertBool:: String -> Bool
 convertBool s
@@ -80,7 +80,7 @@ pagaEstacionamento = do
   vagasString <- readArquivo vagasArq
   if isOcupada vaga
     then do
-      print ("O preco final eh R$ " ++ show(arredonda taxa))
+      print ("O preco final eh R$ " ++ show (arredonda taxa))
       putStrLn "Faça seu pagamento: "
       valorPago <- readLn :: IO Double
       if arredonda taxa == valorPago
@@ -97,8 +97,8 @@ pagaEstacionamento = do
               let listaVaga = replace vagasString [show vaga] [novaLinha]
               let vagas = map (read :: String -> Vaga) listaVaga
               updateByContent vagasArq vagas
-              print ("Estacionamento pago com sucesso, seu troco eh de " ++ show (valorPago - arredonda (taxa)) ++ "reais")
-            else print ("Estacionamento nao foi pago. Valor da taxa (" ++ show (arredonda taxa) ++ ") eh maior que o valor pago")
+              print $ "Estacionamento pago com sucesso, seu troco eh de " ++ show (valorPago - arredonda taxa) ++ "reais"
+            else print $ "Estacionamento nao foi pago. Valor da taxa (" ++ show (arredonda taxa) ++ ") eh maior que o valor pago"
     else print "A vaga nao esta ocupada, falha ao realizar o pagamento"
 
 estacionaVeiculo :: IO()

@@ -88,7 +88,7 @@ updateByContent arquivoNome  modelUpdate = do
 updateByContentRecursivo :: [Vaga] -> Handle -> IO ()
 updateByContentRecursivo [] _ = return ()
 updateByContentRecursivo (model:modelTail) fileHandle = do
-    let linha = show(model)
+    let linha = show model
     hPutStrLn fileHandle linha
     updateByContentRecursivo modelTail fileHandle
 
