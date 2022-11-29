@@ -1,7 +1,7 @@
-Vaga {isOcupada = True, numero = 1, andar = 1, tipo = "carro", tempoInicial = 0, idVaga = "1-carro-1", placaVeiculo = ""}
-Vaga {isOcupada = False, numero = 2, andar = 1, tipo = "moto", tempoInicial = 0, idVaga = "1-moto-2", placaVeiculo = ""}
-Vaga {isOcupada = False, numero = 3, andar = 1, tipo = "van", tempoInicial = 0, idVaga = "1-van-3", placaVeiculo = ""}
-Vaga {isOcupada = True, numero = 1, andar = 2, tipo = "carro", tempoInicial = 0, idVaga = "2-carro-1", placaVeiculo = ""}
-Vaga {isOcupada = False, numero = 2, andar = 2, tipo = "carro", tempoInicial = 0, idVaga = "2-carro-2", placaVeiculo = ""}
-Vaga {isOcupada = True, numero = 3, andar = 2, tipo = "moto", tempoInicial = 0, idVaga = "2-moto-3", placaVeiculo = ""}
-Vaga {isOcupada = False, numero = 4, andar = 2, tipo = "moto", tempoInicial = 0, idVaga = "2-moto-4", placaVeiculo = ""}
+Vaga {isOcupada = True, numero = 1, andar = 1, tipo = "carro", tempoInicial = 0, idVaga = "1-carro-1", placaVeiculo = "null"}
+Vaga {isOcupada = False, numero = 2, andar = 1, tipo = "moto", tempoInicial = 0, idVaga = "1-moto-2", placaVeiculo = "null"}
+Vaga {isOcupada = False, numero = 3, andar = 1, tipo = "van", tempoInicial = 1669745185, idVaga = "1-van-3", placaVeiculo = "3333abcd"}
+Vaga {isOcupada = True, numero = 1, andar = 2, tipo = "carro", tempoInicial = 0, idVaga = "2-carro-1", placaVeiculo = "null"}
+Vaga {isOcupada = False, numero = 2, andar = 2, tipo = "carro", tempoInicial = 1669747930, idVaga = "2-carro-2", placaVeiculo = "1111abcd"}
+Vaga {isOcupada = True, numero = 3, andar = 2, tipo = "moto", tempoInicial = 0, idVaga = "2-moto-3", placaVeiculo = "null"}
+Vaga {isOcupada = False, numero = 4, andar = 2, tipo = "moto", tempoInicial = 1669745017, idVaga = "2-moto-4", placaVeiculo = "2222abcd"}

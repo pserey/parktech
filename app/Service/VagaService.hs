@@ -24,8 +24,10 @@ adicionaVaga = do
     num <- proxNumVaga (read andarInput :: Int)
     let vId = show (num + 1) ++ "-" ++ tipoVeiculo ++ "-" ++ andarInput
     now <- round `fmap` getPOSIXTime
+    -- placa veiculo é adicionada como string sem significado, mas não vazia para facilitar a substituição posteriormente
+    let placaVeiculoVaga = "---"
 
-    let vaga = Vaga False (num + 1) (read andarInput :: Int) tipoVeiculo now vId ""
+    let vaga = Vaga False (num + 1) (read andarInput :: Int) tipoVeiculo now vId placaVeiculoVaga
     addLinha (show vaga) vagasArq
   else
     print "Numero máximo de vagas atingido"
@@ -87,13 +89,6 @@ setTempoVagaTeste numeroVaga numeroAndar novoTempoInicial = do
   let vagas = map (read :: String -> Vaga) listaVaga
   updateByContent vagasArq vagas
 
---- funcao que faz o replace
-replace :: Eq a => [a] -> [a] -> [a] -> [a]
-replace [] _ _ = []
-replace s find repl =
-  if take (length find) s == find
-    then repl ++ replace (drop (length find) s) find repl
-    else head s : replace (tail s) find repl
 
 --- funcao que retorna uma vaga a partir do id
 getVagaByNumero :: Int -> Int -> IO Vaga
@@ -105,3 +100,11 @@ getVagaByNumero numeroVaga numeroAndar = do
     then error "A vaga buscada nao foi encontrada"
     else return $ head vaga
 
+getVagaById :: String -> IO Vaga
+getVagaById idVagaSearch = do
+  vagasString <- readArquivo vagasArq
+  let vagas = map (read :: String -> Vaga) vagasString
+  let vaga = [s | s <- reverse vagas, idVaga s == idVagaSearch]
+  if null vaga
+    then error "A vaga buscada nao foi encontrada"
+    else return $ head vaga

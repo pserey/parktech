@@ -1,13 +1,17 @@
 module Service.EstacionamentoService where
 
 import Control.Monad ()
-import Model.Vaga as V
+import Model.Vaga as Va
 import Model.Veiculo as Ve
+import Model.Cliente as C
+import Model.Historico as H
 import Util.DatabaseManager 
 import Service.VagaService
 import Service.ClienteService
 import Service.VeiculoService 
 import Data.Time.Clock.POSIX ( getPOSIXTime )
+import Data.List
+import Data.Maybe
 
 date :: IO  Integer
 date = round `fmap` getPOSIXTime
@@ -21,11 +25,11 @@ horas dataFinal dataInicial = do
 taxaPagamento :: Vaga -> Bool -> IO Double
 taxaPagamento vaga iSDiaSemana = do
     current <- date
-    let dataFinal = fromIntegral (current)
+    let dataFinal = fromIntegral current
     let dataInicial = fromIntegral (tempoInicial vaga) 
     diferenca <- horas dataFinal dataInicial
-    let d = fromIntegral(diferenca)
-    if V.tipo vaga == "carro" then do
+    let d = fromIntegral diferenca
+    if Va.tipo vaga == "carro" then do
         if (dataFinal - dataInicial) > 7200 then do
             if iSDiaSemana then do
                 return (6 + (((d / 3600)-2)*1.5))
@@ -35,7 +39,7 @@ taxaPagamento vaga iSDiaSemana = do
             if iSDiaSemana then return 6 
             else return 8
 
-    else if V.tipo vaga == "moto" then do
+    else if Va.tipo vaga == "moto" then do
         if (dataFinal - dataInicial)  > 7200 then do
             if iSDiaSemana then do
                 return (4 + ((d /3600)-2))
@@ -56,7 +60,7 @@ taxaPagamento vaga iSDiaSemana = do
             else return 10
 
 arredonda :: Double -> Double
-arredonda x = (fromIntegral (floor (x * (10 ^ 2)))) / (10 ^ 2)
+arredonda x = fromIntegral (floor (x * (10 ^ 2))) / (10 ^ 2)
 
 convertBool:: String -> Bool
 convertBool s
@@ -80,7 +84,7 @@ pagaEstacionamento = do
   vagasString <- readArquivo vagasArq
   if isOcupada vaga
     then do
-      print ("O preco final eh R$ " ++ show(arredonda taxa))
+      print ("O preco final eh R$ " ++ show (arredonda taxa))
       putStrLn "Faça seu pagamento: "
       valorPago <- readLn :: IO Double
       if arredonda taxa == valorPago
@@ -97,8 +101,8 @@ pagaEstacionamento = do
               let listaVaga = replace vagasString [show vaga] [novaLinha]
               let vagas = map (read :: String -> Vaga) listaVaga
               updateByContent vagasArq vagas
-              print ("Estacionamento pago com sucesso, seu troco eh de " ++ show (valorPago - arredonda (taxa)) ++ "reais")
-            else print ("Estacionamento nao foi pago. Valor da taxa (" ++ show (arredonda taxa) ++ ") eh maior que o valor pago")
+              print $ "Estacionamento pago com sucesso, seu troco eh de " ++ show (valorPago - arredonda taxa) ++ "reais"
+            else print $ "Estacionamento nao foi pago. Valor da taxa (" ++ show (arredonda taxa) ++ ") eh maior que o valor pago"
     else print "A vaga nao esta ocupada, falha ao realizar o pagamento"
 
 estacionaVeiculo :: IO()
@@ -107,7 +111,7 @@ estacionaVeiculo = do
     putStrLn "Insira seu CPF: "
     cpfCliente <- getLine
     
-    -- recomenda vaga
+    -- TODO: chamar recomenda vaga
     
     statusCadastroCliente <- verificaCliente cpfCliente
     if statusCadastroCliente then do
@@ -131,6 +135,14 @@ verificaCadastroVeiculo cpfCliente = do
 
 verificaDisponibilidadeVaga :: Veiculo -> String -> IO()
 verificaDisponibilidadeVaga veiculoCliente cpfCliente = do
+    vagaRecomendada <- recomendaVaga cpfCliente veiculoCliente
+    
+    putStrLn "--- VAGA RECOMENDADA ---"
+    if isJust vagaRecomendada then
+        putStrLn $ "A vaga recomendada para você é a vaga de número " ++ show (Va.numero (fromJust vagaRecomendada)) ++ " no andar " ++ show (Va.andar (fromJust vagaRecomendada))
+    else putStrLn "Nao ha vagas recomendadas para seu veiculo"
+    putStrLn "------"
+
     putStrLn "Insira o andar que você deseja estacionar:"
     andarEstacionamento <- readLn :: IO Int
     putStrLn "Insira a vaga que você deseja estacionar:"
@@ -138,9 +150,9 @@ verificaDisponibilidadeVaga veiculoCliente cpfCliente = do
 
     vagaEscolhida <- getVagaByNumero vagaEstacionamento andarEstacionamento
     
-    if Ve.tipo veiculoCliente == V.tipo vagaEscolhida then do
+    if Ve.tipo veiculoCliente == Va.tipo vagaEscolhida then do
         if not $ isOcupada vagaEscolhida then do
-            estaciona cpfCliente (placa veiculoCliente) vagaEstacionamento andarEstacionamento
+            estaciona cpfCliente (placa veiculoCliente) vagaEscolhida
             print "Veiculo estacionado"
         else do
             vagasString <- readArquivo vagasArq
@@ -152,7 +164,7 @@ verificaDisponibilidadeVaga veiculoCliente cpfCliente = do
                 print "Deseja estacionar nessa vaga? (s/n)"
                 opcao <- getLine
                 if opcao == "s" then do
-                    estaciona cpfCliente (placa veiculoCliente) vagaEstacionamento andarEstacionamento
+                    estaciona cpfCliente (placa veiculoCliente) (head vagasLivres)
                     print "Veiculo estacionado"
                 else verificaDisponibilidadeVaga veiculoCliente cpfCliente  
             else 
@@ -163,6 +175,46 @@ verificaDisponibilidadeVaga veiculoCliente cpfCliente = do
 
 -- estaciona :: cpfcliente -> placaVeiculo -> numeroVaga -> numeroAndar
 -- alterar vaga --- isOcupada = true, placaVeiculo = pv, tempoInicial = posix
-estaciona :: String -> String -> Int -> Int -> IO()
-estaciona cpfCliente placaVeiculo numeroVaga numeroAndar = do
-    print "deu certo!!!!!!!!!!!!!!" 
+estaciona :: String -> String -> Vaga -> IO()
+estaciona cpfCliente placaVeiculoEstacionado vagaEscolhida = do
+    -- adiciona placaVeiuclo em vaga no bd e seta tempo de agora
+    -- FIXME: algum erro de read deleta db de vagas inteiro
+    now <- date
+    -- atualiza tempo inicial de vaga
+    updateDb (show vagaEscolhida) (show (Va.tempoInicial vagaEscolhida)) (show now) vagasArq
+    -- atualiza placa de veiculo de vaga
+    vagaAtualizadaTempo <- getVagaByNumero (Va.numero vagaEscolhida) (Va.andar vagaEscolhida)
+    updateDb (show vagaAtualizadaTempo) (show (Va.placaVeiculo vagaAtualizadaTempo)) (show placaVeiculoEstacionado) vagasArq
+    -- adiciona vaga em histórico de cliente
+    registraHistorico cpfCliente vagaEscolhida
+
+registraHistorico :: String -> Vaga -> IO ()
+registraHistorico cpfCliente vagaEscolhida = do
+    historicos <- getHistoricoByCpf cpfCliente
+    if null historicos then do -- cria histórico de cliente se não houver
+        let historico = Historico cpfCliente [vagaEscolhida]
+        addLinha (show historico) historicosArq
+    else do -- senão, atualiza histórico
+        historicosString <- readArquivo historicosArq
+        let historicoCliente = head historicos
+        let historicoAtualizado = Historico (H.clienteCpf historicoCliente) (H.numVagas historicoCliente ++ [vagaEscolhida])
+        let historicosStringAtualizado = replace historicosString [show historicoCliente] [show historicoAtualizado]
+        -- updateByContent historicosArq historicosAtualizados
+        writeFileFromList historicosArq historicosStringAtualizado
+
+
+recomendaVaga :: String -> Veiculo -> IO (Maybe Vaga)
+-- TODO: lidar com historico vazio
+recomendaVaga clienteCpf veiculoCliente = do
+    historico <- getHistoricoByCpf clienteCpf
+    if null historico then return Nothing
+    else do
+        let vagasHistorico = [Va.idVaga v | v <- H.numVagas $ head historico, Ve.tipo veiculoCliente == Va.tipo v]
+        if null vagasHistorico then return Nothing
+        else do
+            vaga <- getVagaById $ elementoMaisComum vagasHistorico
+            return $ Just vaga
+
+
+elementoMaisComum :: Ord a => [a] -> a
+elementoMaisComum = snd . maximum . map (\xs -> (length xs, head xs)) . group . sort

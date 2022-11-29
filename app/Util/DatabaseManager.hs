@@ -3,6 +3,7 @@ module Util.DatabaseManager where
 import Data.List (isInfixOf)
 import Data.Text (pack)
 import Data.Text.Internal.Search (indices)
+import Data.List (intercalate)
 import System.IO
 import System.IO.Strict as S
 import Model.Vaga
@@ -72,28 +73,64 @@ getValor chave linha = do
     -- let valor = if head valor
     return valor
 
+
 meuAppend :: String -> String -> IO ()
 meuAppend arquivo conteudo = do
     arq <- S.readFile arquivo
     writeFile arquivo (arq ++ conteudo)
 
 
-updateByContent :: String -> [Vaga] -> IO ()
-updateByContent arquivoNome  modelUpdate = do
+updateByContent :: Show t => String -> [t] -> IO ()
+updateByContent arquivoNome modelUpdate = do
     fileHandle <- openFile arquivoNome WriteMode
     updateByContentRecursivo modelUpdate fileHandle
     hFlush fileHandle
     hClose fileHandle
 
-updateByContentRecursivo :: [Vaga] -> Handle -> IO ()
+
+updateByContentRecursivo :: Show t => [t] -> Handle -> IO ()
 updateByContentRecursivo [] _ = return ()
 updateByContentRecursivo (model:modelTail) fileHandle = do
-    let linha = show(model)
+    let linha = show model
     hPutStrLn fileHandle linha
     updateByContentRecursivo modelTail fileHandle
+
 
 -- Função que checa se um objeto em string (show) está dentro de um arquivo especifico
 checkIfExist :: String -> String -> IO Bool
 checkIfExist line arq = do
   linhas <- S.readFile arq
   return $ line `isInfixOf` linhas
+
+
+-- funcao que faz o replace
+-- recebe: estrutura que será alterada -> valor existente -> valor novo
+replace :: Eq a => [a] -> [a] -> [a] -> [a]
+replace [] _ _ = []
+replace s find repl =
+  if take (length find) s == find
+    then repl ++ replace (drop (length find) s) find repl
+    else head s : replace (tail s) find repl
+
+-- função que atualiza arquivo com lista de objetos
+-- converte objetos com show e cria um novo arquivo separado por linhas
+-- FIXME: banco de dados é repopulado com strings erradas "" ao redor de toda linha
+writeFileFromList :: String -> [String] -> IO ()
+writeFileFromList nomeArquivo conteudos = do
+    let dbString = intercalate "\n" conteudos
+    writeFile nomeArquivo dbString
+
+-- função que substitui elemento em linha do db usando replace
+updateDb :: String -> String -> String -> String -> IO ()
+updateDb linha elemento elementoNovo nomeArq = do
+    db <- S.readFile nomeArq
+
+    -- atualiza elemento em linha
+    let linhaAtualizada = replace linha elemento elementoNovo
+    -- atualiza linha em db
+    -- S.readFile retorna toda \ com \\ na frente, impossibilitando que read :: Vaga funcione, por isso se usa replace para isso também
+    let dbAtualizado = replace db linha linhaAtualizada
+
+    -- reescreve db
+    writeFile nomeArq dbAtualizado
+    -- writeFileFromList nomeArq dbAtualizado
