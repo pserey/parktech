@@ -87,13 +87,6 @@ setTempoVagaTeste numeroVaga numeroAndar novoTempoInicial = do
   let vagas = map (read :: String -> Vaga) listaVaga
   updateByContent vagasArq vagas
 
---- funcao que faz o replace
-replace :: Eq a => [a] -> [a] -> [a] -> [a]
-replace [] _ _ = []
-replace s find repl =
-  if take (length find) s == find
-    then repl ++ replace (drop (length find) s) find repl
-    else head s : replace (tail s) find repl
 
 --- funcao que retorna uma vaga a partir do id
 getVagaByNumero :: Int -> Int -> IO Vaga

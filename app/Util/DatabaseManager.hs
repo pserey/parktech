@@ -72,6 +72,7 @@ getValor chave linha = do
     -- let valor = if head valor
     return valor
 
+
 meuAppend :: String -> String -> IO ()
 meuAppend arquivo conteudo = do
     arq <- S.readFile arquivo
@@ -85,6 +86,7 @@ updateByContent arquivoNome  modelUpdate = do
     hFlush fileHandle
     hClose fileHandle
 
+
 updateByContentRecursivo :: [Vaga] -> Handle -> IO ()
 updateByContentRecursivo [] _ = return ()
 updateByContentRecursivo (model:modelTail) fileHandle = do
@@ -92,8 +94,18 @@ updateByContentRecursivo (model:modelTail) fileHandle = do
     hPutStrLn fileHandle linha
     updateByContentRecursivo modelTail fileHandle
 
+
 -- Função que checa se um objeto em string (show) está dentro de um arquivo especifico
 checkIfExist :: String -> String -> IO Bool
 checkIfExist line arq = do
   linhas <- S.readFile arq
   return $ line `isInfixOf` linhas
+
+
+--- funcao que faz o replace
+replace :: Eq a => [a] -> [a] -> [a] -> [a]
+replace [] _ _ = []
+replace s find repl =
+  if take (length find) s == find
+    then repl ++ replace (drop (length find) s) find repl
+    else head s : replace (tail s) find repl
