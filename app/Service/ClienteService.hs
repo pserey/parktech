@@ -22,14 +22,17 @@ criaCliente = do
     cpf <- getLine
     putStrLn "nome: "
     nome <- getLine
-    putStrLn "Gostaria que seu historico ficasse salvo? "
+    putStrLn "Gostaria que seu historico ficasse salvo? (s/n) "
     aceita <- getLine
 
-    if aceita == "sim"  then do
+    if aceita == "s"  then do
         let cliente = Cliente cpf nome True
         addLinha (show cliente) clienteArq
-    else do
+    else if aceita == "n" then do
         let cliente = Cliente cpf nome False
         addLinha (show cliente) clienteArq
+    else do
+        putStrLn "Escolha uma das duas opções que foi fornecida!!"
+        criaCliente
 
 
