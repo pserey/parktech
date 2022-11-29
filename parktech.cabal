@@ -45,8 +45,10 @@ executable parktech-exe
       Model.Cliente
       Model.Vaga
       Model.Veiculo
+      Service.ClienteService
       Service.EstacionamentoService
       Service.VagaService
+      Service.VeiculoService
       Util.DatabaseManager
       Paths_parktech
   hs-source-dirs:

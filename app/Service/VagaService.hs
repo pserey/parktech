@@ -78,10 +78,10 @@ vagasDisponiveisAndar = do
   print $ show (length ([s | s <- reverse (vagasStatus vagas "van"), andar s == a])) ++ " vaga(s) disponivel(is) para vans no andar " ++ show (a)
 
 -- Função que modifica o tempo inicial de uma vaga
-setTempoVagaTeste :: Int -> Int -> IO ()
-setTempoVagaTeste numeroVaga novoTempoInicial = do
+setTempoVagaTeste :: Int -> Int -> Int -> IO ()
+setTempoVagaTeste numeroVaga numeroAndar novoTempoInicial = do
   vagasString <- readArquivo vagasArq
-  vaga <- getVagaByNumero numeroVaga
+  vaga <- getVagaByNumero numeroVaga numeroAndar
   let novaLinha = replace (show vaga) (show (tempoInicial vaga)) (show novoTempoInicial)
   let listaVaga = replace vagasString [show vaga] [novaLinha]
   let vagas = map (read :: String -> Vaga) listaVaga
@@ -93,14 +93,14 @@ replace [] _ _ = []
 replace s find repl =
   if take (length find) s == find
     then repl ++ replace (drop (length find) s) find repl
-    else [head s] ++ replace (tail s) find repl
+    else head s : replace (tail s) find repl
 
 --- funcao que retorna uma vaga a partir do id
-getVagaByNumero :: Int -> IO Vaga
-getVagaByNumero numeroVaga = do
+getVagaByNumero :: Int -> Int -> IO Vaga
+getVagaByNumero numeroVaga numeroAndar = do
   vagasString <- readArquivo vagasArq
   let vagas = map (read :: String -> Vaga) vagasString
-  let vaga = [s | s <- reverse vagas, numero s == numeroVaga]
+  let vaga = [s | s <- reverse vagas, numero s == numeroVaga && andar s == numeroAndar]
   if null vaga
     then error "A vaga buscada nao foi encontrada"
     else return $ head vaga
