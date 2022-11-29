@@ -43,6 +43,7 @@ executable parktech-exe
   other-modules:
       Menu
       Model.Cliente
+      Model.Historico
       Model.Vaga
       Model.Veiculo
       Service.ClienteService
