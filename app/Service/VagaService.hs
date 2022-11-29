@@ -24,8 +24,10 @@ adicionaVaga = do
     num <- proxNumVaga (read andarInput :: Int)
     let vId = show (num + 1) ++ "-" ++ tipoVeiculo ++ "-" ++ andarInput
     now <- round `fmap` getPOSIXTime
+    -- placa veiculo é adicionada como string sem significado, mas não vazia para facilitar a substituição posteriormente
+    let placaVeiculoVaga = "---"
 
-    let vaga = Vaga False (num + 1) (read andarInput :: Int) tipoVeiculo now vId ""
+    let vaga = Vaga False (num + 1) (read andarInput :: Int) tipoVeiculo now vId placaVeiculoVaga
     addLinha (show vaga) vagasArq
   else
     print "Numero máximo de vagas atingido"
