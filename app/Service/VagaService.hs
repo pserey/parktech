@@ -100,3 +100,11 @@ getVagaByNumero numeroVaga numeroAndar = do
     then error "A vaga buscada nao foi encontrada"
     else return $ head vaga
 
+getVagaById :: String -> IO Vaga
+getVagaById idVagaSearch = do
+  vagasString <- readArquivo vagasArq
+  let vagas = map (read :: String -> Vaga) vagasString
+  let vaga = [s | s <- reverse vagas, idVaga s == idVagaSearch]
+  if null vaga
+    then error "A vaga buscada nao foi encontrada"
+    else return $ head vaga

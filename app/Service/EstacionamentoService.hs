@@ -10,6 +10,8 @@ import Service.VagaService
 import Service.ClienteService
 import Service.VeiculoService 
 import Data.Time.Clock.POSIX ( getPOSIXTime )
+import Data.List
+import Data.Maybe
 
 date :: IO  Integer
 date = round `fmap` getPOSIXTime
@@ -133,6 +135,14 @@ verificaCadastroVeiculo cpfCliente = do
 
 verificaDisponibilidadeVaga :: Veiculo -> String -> IO()
 verificaDisponibilidadeVaga veiculoCliente cpfCliente = do
+    vagaRecomendada <- recomendaVaga cpfCliente veiculoCliente
+    
+    putStrLn "--- VAGA RECOMENDADA ---"
+    if isJust vagaRecomendada then
+        putStrLn $ "A vaga recomendada para você é a vaga de número " ++ show (Va.numero (fromJust vagaRecomendada)) ++ " no andar " ++ show (Va.andar (fromJust vagaRecomendada))
+    else putStrLn "Nao ha vagas recomendadas para seu veiculo"
+    putStrLn "------"
+
     putStrLn "Insira o andar que você deseja estacionar:"
     andarEstacionamento <- readLn :: IO Int
     putStrLn "Insira a vaga que você deseja estacionar:"
@@ -191,3 +201,20 @@ registraHistorico cpfCliente vagaEscolhida = do
         let historicosStringAtualizado = replace historicosString [show historicoCliente] [show historicoAtualizado]
         -- updateByContent historicosArq historicosAtualizados
         writeFileFromList historicosArq historicosStringAtualizado
+
+
+recomendaVaga :: String -> Veiculo -> IO (Maybe Vaga)
+-- TODO: lidar com historico vazio
+recomendaVaga clienteCpf veiculoCliente = do
+    historico <- getHistoricoByCpf clienteCpf
+    if null historico then return Nothing
+    else do
+        let vagasHistorico = [Va.idVaga v | v <- H.numVagas $ head historico, Ve.tipo veiculoCliente == Va.tipo v]
+        if null vagasHistorico then return Nothing
+        else do
+            vaga <- getVagaById $ elementoMaisComum vagasHistorico
+            return $ Just vaga
+
+
+elementoMaisComum :: Ord a => [a] -> a
+elementoMaisComum = snd . maximum . map (\xs -> (length xs, head xs)) . group . sort
