@@ -148,3 +148,20 @@ buscaUltimoAndar = do
       if null vagasAndar
         then return 0
         else return (andar $ head vagasAndar)
+
+-- Funcao Para adicionar um novo andar no estacionamento. Cada andar tem por padrão 10 vagas, que serão distribuidas
+-- no metodo adcionasVagasPorTipoVeiculo
+adicionaAndar :: IO ()
+adicionaAndar = do
+  putStrLn "Adicionando proximo andar"
+  numAndar <- buscaUltimoAndar
+  adicionaAndarRecursivo 10 (numAndar + 1)
+
+--Função recursiva para adicionar as vagas no andar andar
+adicionaAndarRecursivo :: Int -> Int -> IO ()
+adicionaAndarRecursivo cont numeroAndar =
+  if cont >= 1 then do
+    adicionaVagasAndarPorTipoVeiculo numeroAndar (cont - 1)
+    adicionaAndarRecursivo (cont - 1) numeroAndar
+  else
+    print "Andar cadastrado com sucesso"
