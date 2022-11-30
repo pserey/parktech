@@ -30,6 +30,7 @@ adicionaVaga = do
 
     let vaga = Vaga False (num + 1) (read andarInput :: Int) tipoVeiculo now vId placaVeiculoVaga
     addLinha (show vaga) vagasArq
+    putStrLn "Vaga adicionada com sucesso!"
   else
     putStrLn "Numero máximo de vagas atingido"
 
