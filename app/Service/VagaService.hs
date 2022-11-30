@@ -80,8 +80,16 @@ vagasDisponiveisAndar = do
   print $ show (length ([s | s <- reverse (vagasStatus vagas "van"), andar s == a])) ++ " vaga(s) disponivel(is) para vans no andar " ++ show (a)
 
 -- Função que modifica o tempo inicial de uma vaga
-setTempoVagaTeste :: Int -> Int -> Int -> IO ()
-setTempoVagaTeste numeroVaga numeroAndar novoTempoInicial = do
+setTempoVagaTeste :: IO ()
+setTempoVagaTeste = do
+  putStrLn "--- FUNÇÃO PARA MODIFICAR O TEMPO DE UM VAGA PARA TESTES ---"
+  putStrLn "Insira os dados da modificação"
+  putStrLn "Numero da vaga: "
+  numeroVaga <- readLn :: IO Int
+  putStrLn "Numero do andar: "
+  numeroAndar <- readLn :: IO Int
+  putStrLn "Novo tempo: "
+  novoTempoInicial <- readLn :: IO Int
   vagasString <- readArquivo vagasArq
   vaga <- getVagaByNumero numeroVaga numeroAndar
   let novaLinha = replace (show vaga) (show (tempoInicial vaga)) (show novoTempoInicial)
