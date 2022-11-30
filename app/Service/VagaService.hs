@@ -75,9 +75,9 @@ vagasDisponiveisAndar = do
 
   vagasString <- readArquivo vagasArq
   let vagas = map (read :: String -> Vaga) vagasString
-  print $ show (length ([s | s <- reverse (vagasStatus vagas "carro"), andar s == a])) ++ " vaga(s) disponivel(is) para carros no andar " ++ show (a)
-  print $ show (length ([s | s <- reverse (vagasStatus vagas "moto"), andar s == a])) ++ " vaga(s) disponivel(is) para motos no andar " ++ show (a)
-  print $ show (length ([s | s <- reverse (vagasStatus vagas "van"), andar s == a])) ++ " vaga(s) disponivel(is) para vans no andar " ++ show (a)
+  putStrLn $ show (length ([s | s <- reverse (vagasStatus vagas "carro"), andar s == a])) ++ " vaga(s) disponivel(is) para carros no andar " ++ show (a)
+  putStrLn $ show (length ([s | s <- reverse (vagasStatus vagas "moto"), andar s == a])) ++ " vaga(s) disponivel(is) para motos no andar " ++ show (a)
+  putStrLn $ show (length ([s | s <- reverse (vagasStatus vagas "van"), andar s == a])) ++ " vaga(s) disponivel(is) para vans no andar " ++ show (a)
 
 -- Função que modifica o tempo inicial de uma vaga
 setTempoVagaTeste :: IO ()
