@@ -23,9 +23,9 @@ horas dataFinal dataInicial = do
     return (date1 - date2)
 
 retornaHoras :: IO Integer -> IO Double
-retornaHoras date = do
-    retorno <- date
-    let hora = (fromIntegral (retorno))/3600
+retornaHoras tempoVaga = do
+    retorno <- tempoVaga
+    let hora = fromIntegral retorno / 3600
     return hora
 
 transforma :: IO()
@@ -42,7 +42,7 @@ transforma = do
 
     final <- retornaHoras(horas dataFinal dataInicial)
     let retorno = arredonda final
-    putStrLn $ show(retorno) ++ " horas"
+    putStrLn $ show retorno ++ " horas"
 
 
 taxaPagamento :: Vaga -> Bool -> IO Double
@@ -134,8 +134,6 @@ estacionaVeiculo = do
     putStrLn "Insira seu CPF: "
     cpfCliente <- getLine
     
-    -- TODO: chamar recomenda vaga
-    
     statusCadastroCliente <- verificaCliente cpfCliente
     if statusCadastroCliente then do
         verificaCadastroVeiculo cpfCliente
@@ -201,7 +199,6 @@ verificaDisponibilidadeVaga veiculoCliente cpfCliente = do
 estaciona :: String -> String -> Vaga -> IO()
 estaciona cpfCliente placaVeiculoEstacionado vagaEscolhida = do
     -- adiciona placaVeiuclo em vaga no bd e seta tempo de agora
-    -- FIXME: algum erro de read deleta db de vagas inteiro
     now <- date
     -- atualiza tempo inicial de vaga
     updateDb (show vagaEscolhida) (show (Va.tempoInicial vagaEscolhida)) (show now) vagasArq
@@ -227,7 +224,6 @@ registraHistorico cpfCliente vagaEscolhida = do
 
 
 recomendaVaga :: String -> Veiculo -> IO (Maybe Vaga)
--- TODO: lidar com historico vazio
 recomendaVaga clienteCpf veiculoCliente = do
     historico <- getHistoricoByCpf clienteCpf
     if null historico then return Nothing

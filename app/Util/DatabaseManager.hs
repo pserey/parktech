@@ -45,33 +45,31 @@ findByRecursivo (x:xs) str = do
     else findByRecursivo xs str
 
 
--- função que busca um valor em uma string em formato de Show Object
--- retorna o valor com "" se for string e sem se for inteiro
--- TODO: implementar split
--- TODO: resolver "" em retorno de strings
-getValor :: String -> String -> IO String
-getValor chave linha = do
-    -- acha indice do nome do objeto e remove nome da string
-    let idxObj = head $ indices (pack "{") (pack linha)
-    let mapa = drop idxObj linha
+-- -- função que busca um valor em uma string em formato de Show Object
+-- -- retorna o valor com "" se for string e sem se for inteiro
+-- getValor :: String -> String -> IO String
+-- getValor chave linha = do
+--     -- acha indice do nome do objeto e remove nome da string
+--     let idxObj = head $ indices (pack "{") (pack linha)
+--     let mapa = drop idxObj linha
 
-    -- acha indice de chave e remove chave
-    let idxChave = head $ indices (pack chave) (pack mapa)
-    let mapaComecaChave = drop (idxChave + length chave + 3) mapa
+--     -- acha indice de chave e remove chave
+--     let idxChave = head $ indices (pack chave) (pack mapa)
+--     let mapaComecaChave = drop (idxChave + length chave + 3) mapa
 
-    -- acha indice final de valor
-    -- se tiver uma virgula na frente, o indice final é o da virgula
-    -- senão, o indice final é o da chave fechando
-    let idxFinal = if null $ indices (pack ",") (pack mapaComecaChave) then 
-                    head $ indices (pack "}") (pack mapaComecaChave)
-                    else head $ indices (pack ",") (pack mapaComecaChave)
+--     -- acha indice final de valor
+--     -- se tiver uma virgula na frente, o indice final é o da virgula
+--     -- senão, o indice final é o da chave fechando
+--     let idxFinal = if null $ indices (pack ",") (pack mapaComecaChave) then 
+--                     head $ indices (pack "}") (pack mapaComecaChave)
+--                     else head $ indices (pack ",") (pack mapaComecaChave)
 
-    -- remove string na frente do valor
-    -- acha valor
-    let valor = take idxFinal mapaComecaChave
+--     -- remove string na frente do valor
+--     -- acha valor
+--     let valor = take idxFinal mapaComecaChave
 
-    -- let valor = if head valor
-    return valor
+--     -- let valor = if head valor
+--     return valor
 
 
 meuAppend :: String -> String -> IO ()
@@ -114,11 +112,10 @@ replace s find repl =
 
 -- função que atualiza arquivo com lista de objetos
 -- converte objetos com show e cria um novo arquivo separado por linhas
--- FIXME: banco de dados é repopulado com strings erradas "" ao redor de toda linha
 writeFileFromList :: String -> [String] -> IO ()
 writeFileFromList nomeArquivo conteudos = do
     let dbString = intercalate "\n" conteudos
-    writeFile nomeArquivo dbString
+    writeFile nomeArquivo (dbString ++ "\n")
 
 -- função que substitui elemento em linha do db usando replace
 updateDb :: String -> String -> String -> String -> IO ()
