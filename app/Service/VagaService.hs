@@ -3,6 +3,7 @@ module Service.VagaService where
 import Control.Monad ()
 import Data.Time.Clock.POSIX (getPOSIXTime)
 import Model.Vaga
+import Data.List
 import Util.DatabaseManager
 import Prelude hiding (id)
 
@@ -144,10 +145,10 @@ buscaUltimoAndar = do
     then return 0
     else do
       let vagas = map (read :: String -> Vaga) vagasString
-      let vagasAndar = reverse vagas
-      if null vagasAndar
+      let andarNumeros = map andar vagas
+      if null andarNumeros
         then return 0
-        else return (andar $ head vagasAndar)
+        else return $ maximum andarNumeros
 
 -- Funcao Para adicionar um novo andar no estacionamento. Cada andar tem por padrão 10 vagas, que serão distribuidas
 -- no metodo adcionasVagasPorTipoVeiculo
