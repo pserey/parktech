@@ -116,3 +116,15 @@ getVagaById idVagaSearch = do
   if null vaga
     then error "A vaga buscada nao foi encontrada"
     else return $ head vaga
+
+    --- adiciona vaga de acordo com o tipo do veiculo, sendo ao todo 7 vagas para carro, 2 para motos e 1 para van.
+adicionaVagasAndarPorTipoVeiculo :: Int -> Int -> IO()
+adicionaVagasAndarPorTipoVeiculo numeroAndar cont = do
+  num <- proxNumVaga numeroAndar
+  let vId = show (num + 1) ++ "-" ++ buscaTipoVeiculo cont ++ "-" ++ show numeroAndar
+  now <- round `fmap` getPOSIXTime
+  -- placa veiculo é adicionada como string sem significado, mas não vazia para facilitar a substituição posteriormente
+  let placaVeiculoVaga = "---"
+  let vaga = Vaga False (num + 1) numeroAndar (buscaTipoVeiculo cont) now vId placaVeiculoVaga
+  addLinha (show vaga) vagasArq
+
