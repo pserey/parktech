@@ -107,7 +107,7 @@ pagaEstacionamento = do
   vagasString <- readArquivo vagasArq
   if isOcupada vaga
     then do
-      print ("O preco final eh R$ " ++ show (arredonda taxa))
+      putStrLn ("O preco final eh R$ " ++ show (arredonda taxa))
       putStrLn "Faça seu pagamento: "
       valorPago <- readLn :: IO Double
       if arredonda taxa == valorPago
@@ -116,7 +116,7 @@ pagaEstacionamento = do
           let listaVaga = replace vagasString [show vaga] [novaLinha]
           let vagas = map (read :: String -> Vaga) listaVaga
           updateByContent vagasArq vagas
-          print "Estacionamento pago com sucesso"
+          putStrLn "Estacionamento pago com sucesso"
         else
           if arredonda taxa < valorPago
             then do
@@ -124,9 +124,9 @@ pagaEstacionamento = do
               let listaVaga = replace vagasString [show vaga] [novaLinha]
               let vagas = map (read :: String -> Vaga) listaVaga
               updateByContent vagasArq vagas
-              print $ "Estacionamento pago com sucesso, seu troco eh de " ++ show (valorPago - arredonda taxa) ++ "reais"
-            else print $ "Estacionamento nao foi pago. Valor da taxa (" ++ show (arredonda taxa) ++ ") eh maior que o valor pago"
-    else print "A vaga nao esta ocupada, falha ao realizar o pagamento"
+              putStrLn $ "Estacionamento pago com sucesso, seu troco eh de " ++ show (valorPago - arredonda taxa) ++ "reais"
+            else putStrLn $ "Estacionamento nao foi pago. Valor da taxa (" ++ show (arredonda taxa) ++ ") eh maior que o valor pago"
+    else putStrLn "A vaga nao esta ocupada, falha ao realizar o pagamento"
 
 estacionaVeiculo :: IO()
 estacionaVeiculo = do
@@ -138,7 +138,7 @@ estacionaVeiculo = do
     if statusCadastroCliente then do
         verificaCadastroVeiculo cpfCliente
     else do
-        print "criar cliente" -- criar função
+        criaCliente
         verificaCadastroVeiculo cpfCliente
 
 verificaCadastroVeiculo :: String -> IO()
@@ -150,7 +150,7 @@ verificaCadastroVeiculo cpfCliente = do
         let veiculoCliente = head veiculoClienteList
         verificaDisponibilidadeVaga veiculoCliente cpfCliente
     else do
-        print "criaVeiculo" -- criar função 
+        criaVeiculo
         let veiculoCliente = head veiculoClienteList
         verificaDisponibilidadeVaga veiculoCliente cpfCliente
 
@@ -180,18 +180,18 @@ verificaDisponibilidadeVaga veiculoCliente cpfCliente = do
             let vagas = map (read :: String -> Vaga) vagasString
             let vagasLivres = vagasStatus vagas (Ve.tipo veiculoCliente)
             if not (null vagasLivres) then do
-                print $ "A vaga escolhida nao esta disponivel, mas voce pode estacionar o veiculo na vaga numero "
+                putStrLn $ "A vaga escolhida nao esta disponivel, mas voce pode estacionar o veiculo na vaga numero "
                          ++ show (numero $ head vagasLivres) ++ " no andar " ++ show (andar $ head vagasLivres)
-                print "Deseja estacionar nessa vaga? (s/n)"
+                putStrLn "Deseja estacionar nessa vaga? (s/n)"
                 opcao <- getLine
                 if opcao == "s" then do
                     estaciona cpfCliente (placa veiculoCliente) (head vagasLivres)
                     print "Veiculo estacionado"
                 else verificaDisponibilidadeVaga veiculoCliente cpfCliente  
             else 
-                print "Nao ha vagas livres que comportem esse tipo de veiculo"
+                putStrLn "Nao ha vagas livres que comportem esse tipo de veiculo"
     else do 
-        print "Seu veiculo nao pode estacionar nessa vaga, porque ela nao comporta veiculos desse tipo"
+        putStrLn "Seu veiculo nao pode estacionar nessa vaga, porque ela nao comporta veiculos desse tipo"
         verificaDisponibilidadeVaga veiculoCliente cpfCliente  
 
 -- estaciona :: cpfcliente -> placaVeiculo -> numeroVaga -> numeroAndar

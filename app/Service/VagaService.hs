@@ -30,7 +30,7 @@ adicionaVaga = do
     let vaga = Vaga False (num + 1) (read andarInput :: Int) tipoVeiculo now vId placaVeiculoVaga
     addLinha (show vaga) vagasArq
   else
-    print "Numero máximo de vagas atingido"
+    putStrLn "Numero máximo de vagas atingido"
 
 -- print $ show vaga
 
@@ -132,9 +132,9 @@ adicionaVagasAndarPorTipoVeiculo numeroAndar cont = do
   --- retorna o proximo tipo de vaga por tipo de veiculo
 buscaTipoVeiculo :: Int -> String
 buscaTipoVeiculo cont 
-  |cont >= 3 = "Carro"
-  |cont >= 1 = "Moto"
-  |otherwise = "Van"
+  |cont >= 3 = "carro"
+  |cont >= 1 = "moto"
+  |otherwise = "van"
 
 -- Funcao para buscar o ultimo andar Cadastrado
 buscaUltimoAndar :: IO Int
@@ -164,4 +164,4 @@ adicionaAndarRecursivo cont numeroAndar =
     adicionaVagasAndarPorTipoVeiculo numeroAndar (cont - 1)
     adicionaAndarRecursivo (cont - 1) numeroAndar
   else
-    print "Andar cadastrado com sucesso"
+    putStrLn "Andar cadastrado com sucesso"
