@@ -200,8 +200,11 @@ estaciona :: String -> String -> Vaga -> IO()
 estaciona cpfCliente placaVeiculoEstacionado vagaEscolhida = do
     -- adiciona placaVeiuclo em vaga no bd e seta tempo de agora
     now <- date
+    -- atualiza status de ocupação de vaga
+    updateDb (show vagaEscolhida) (show (Va.isOcupada vagaEscolhida)) (show True) vagasArq
     -- atualiza tempo inicial de vaga
-    updateDb (show vagaEscolhida) (show (Va.tempoInicial vagaEscolhida)) (show now) vagasArq
+    vagaAtualizadaStatus <- getVagaById (Va.idVaga vagaEscolhida)
+    updateDb (show vagaAtualizadaStatus) (show (Va.tempoInicial vagaAtualizadaStatus)) (show now) vagasArq
     -- atualiza placa de veiculo de vaga
     vagaAtualizadaTempo <- getVagaByNumero (Va.numero vagaEscolhida) (Va.andar vagaEscolhida)
     updateDb (show vagaAtualizadaTempo) (show (Va.placaVeiculo vagaAtualizadaTempo)) (show placaVeiculoEstacionado) vagasArq
