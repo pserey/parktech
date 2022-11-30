@@ -136,3 +136,15 @@ buscaTipoVeiculo cont
   |cont >= 1 = "Moto"
   |otherwise = "Van"
 
+-- Funcao para buscar o ultimo andar Cadastrado
+buscaUltimoAndar :: IO Int
+buscaUltimoAndar = do
+  vagasString <- readArquivo vagasArq -- tratar exception de andar não existir
+  if null vagasString
+    then return 0
+    else do
+      let vagas = map (read :: String -> Vaga) vagasString
+      let vagasAndar = reverse vagas
+      if null vagasAndar
+        then return 0
+        else return (andar $ head vagasAndar)
