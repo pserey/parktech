@@ -50,7 +50,7 @@ opcaomenuInicial :: String -> IO()
 opcaomenuInicial opcao
     | opcao == "1" = menuCliente
     | opcao == "2" = menuAdministrador
-    | opcao == "3" = putStrLn "Sistema fechando"
+    | opcao == "3" = putStrLn ""
     | otherwise = do putStrLn "Insira um valor válido!\n"
 
 
@@ -58,7 +58,7 @@ opcaomenuAdministrador :: String -> IO()
 opcaomenuAdministrador opcao
     |opcao == "1" = adicionaVaga
     |opcao == "2" = putStrLn "adicionaAndar"
-    |opcao == "3" = putStrLn "adicionaTempoVaga" -- TODO: falta fazer o menu na função
+    |opcao == "3" = setTempoVagaTeste
     |opcao == "4" = menuInicial
     |otherwise = do 
         putStrLn "Insira um valor válido!\n"
