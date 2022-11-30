@@ -22,6 +22,29 @@ horas dataFinal dataInicial = do
     let date2 =  round dataInicial
     return (date1 - date2)
 
+retornaHoras :: IO Integer -> IO Double
+retornaHoras date = do
+    retorno <- date
+    let hora = (fromIntegral (retorno))/3600
+    return hora
+
+transforma :: IO()
+transforma = do
+    putStrLn "----- TEMPO DA VAGA -----"
+    putStrLn "Diga o numero da sua vaga: "
+    vagaInput <- readLn
+    putStrLn "Diga o numero do andar: "
+    andar <- readLn
+    vaga <- getVagaByNumero vagaInput andar
+    current <- date
+    let dataFinal = fromIntegral current
+    let dataInicial = fromIntegral (tempoInicial vaga) 
+
+    final <- retornaHoras(horas dataFinal dataInicial)
+    let retorno = arredonda final
+    putStrLn $ show(retorno) ++ " horas"
+
+
 taxaPagamento :: Vaga -> Bool -> IO Double
 taxaPagamento vaga iSDiaSemana = do
     current <- date

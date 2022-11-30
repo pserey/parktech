@@ -39,7 +39,8 @@ menuCliente = do
     putStrLn "\n2 - Pagar estacionamento"
     putStrLn "\n3 - Ver vagas disponiveis"
     putStrLn "\n4 - Ver vagas disponiveis por andar"
-    putStrLn "\n5 - Voltar para o menu inicial"
+    putStrLn "\n5 - Ver o tempo que está na vaga"
+    putStrLn "\n6 - Voltar para o menu inicial"
 
     opcao <- getLine
     putStr "\n"
@@ -70,7 +71,8 @@ opcaomenuCliente opcao
     |opcao == "2" = pagaEstacionamento
     |opcao == "3" = vagasDisponiveis
     |opcao == "4" = vagasDisponiveisAndar
-    |opcao == "5" = menuInicial
+    |opcao == "5" = transforma
+    |opcao == "6" = menuInicial
     |otherwise = do 
         putStrLn "Insira um valor válido!\n"
         menuCliente
