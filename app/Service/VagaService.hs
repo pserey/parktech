@@ -116,3 +116,52 @@ getVagaById idVagaSearch = do
   if null vaga
     then error "A vaga buscada nao foi encontrada"
     else return $ head vaga
+
+    --- adiciona vaga de acordo com o tipo do veiculo, sendo ao todo 7 vagas para carro, 2 para motos e 1 para van.
+adicionaVagasAndarPorTipoVeiculo :: Int -> Int -> IO()
+adicionaVagasAndarPorTipoVeiculo numeroAndar cont = do
+  num <- proxNumVaga numeroAndar
+  let vId = show (num + 1) ++ "-" ++ buscaTipoVeiculo cont ++ "-" ++ show numeroAndar
+  now <- round `fmap` getPOSIXTime
+  -- placa veiculo é adicionada como string sem significado, mas não vazia para facilitar a substituição posteriormente
+  let placaVeiculoVaga = "---"
+  let vaga = Vaga False (num + 1) numeroAndar (buscaTipoVeiculo cont) now vId placaVeiculoVaga
+  addLinha (show vaga) vagasArq
+
+
+  --- retorna o proximo tipo de vaga por tipo de veiculo
+buscaTipoVeiculo :: Int -> String
+buscaTipoVeiculo cont 
+  |cont >= 3 = "Carro"
+  |cont >= 1 = "Moto"
+  |otherwise = "Van"
+
+-- Funcao para buscar o ultimo andar Cadastrado
+buscaUltimoAndar :: IO Int
+buscaUltimoAndar = do
+  vagasString <- readArquivo vagasArq -- tratar exception de andar não existir
+  if null vagasString
+    then return 0
+    else do
+      let vagas = map (read :: String -> Vaga) vagasString
+      let vagasAndar = reverse vagas
+      if null vagasAndar
+        then return 0
+        else return (andar $ head vagasAndar)
+
+-- Funcao Para adicionar um novo andar no estacionamento. Cada andar tem por padrão 10 vagas, que serão distribuidas
+-- no metodo adcionasVagasPorTipoVeiculo
+adicionaAndar :: IO ()
+adicionaAndar = do
+  putStrLn "Adicionando proximo andar"
+  numAndar <- buscaUltimoAndar
+  adicionaAndarRecursivo 10 (numAndar + 1)
+
+--Função recursiva para adicionar as vagas no andar andar
+adicionaAndarRecursivo :: Int -> Int -> IO ()
+adicionaAndarRecursivo cont numeroAndar =
+  if cont >= 1 then do
+    adicionaVagasAndarPorTipoVeiculo numeroAndar (cont - 1)
+    adicionaAndarRecursivo (cont - 1) numeroAndar
+  else
+    print "Andar cadastrado com sucesso"

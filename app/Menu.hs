@@ -58,7 +58,7 @@ opcaomenuInicial opcao
 opcaomenuAdministrador :: String -> IO()
 opcaomenuAdministrador opcao
     |opcao == "1" = adicionaVaga
-    |opcao == "2" = putStrLn "adicionaAndar"
+    |opcao == "2" = adicionaAndar
     |opcao == "3" = setTempoVagaTeste
     |opcao == "4" = menuInicial
     |otherwise = do 
