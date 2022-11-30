@@ -29,6 +29,7 @@ criaCliente = do
 
     let cliente = Cliente cpf nome
     addLinha (show cliente) clientesArq
+    putStrLn "Cliente cadastrado com sucesso!"
 
 getClienteByCpf :: String -> IO Cliente
 getClienteByCpf cpfCliente = do

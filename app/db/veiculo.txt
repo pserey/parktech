@@ -1,3 +1,8 @@
 Veiculo {tipo = "carro", placa = "1111abcd", cor = "azul"}
 Veiculo {tipo = "moto", placa = "2222abcd", cor = "vermelho"}
 Veiculo {tipo = "van", placa = "3333abcd", cor = "branco"}
+Veiculo {tipo = "carro", placa = "4444acbd", cor = "azul"}
+Veiculo {tipo = "van", placa = "abcd1", cor = "verde"}
+Veiculo {tipo = "van", placa = "abcd1", cor = "verde"}
+Veiculo {tipo = "carro", placa = "99999a", cor = "azul"}
+Veiculo {tipo = "van", placa = "pppp", cor = "verde"}

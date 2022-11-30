@@ -3,3 +3,5 @@ Cliente {cpf = "14714714714", nome = "Pedro"}
 Cliente {cpf = "15915915915", nome = "Vandressa"}
 Cliente {cpf = "12341234123", nome = "Wendell"}
 Cliente {cpf = "35735735735", nome = "João Henrique"}
+Cliente {cpf = "234234234", nome = "eojotas"}
+Cliente {cpf = "1230", nome = "everton"}

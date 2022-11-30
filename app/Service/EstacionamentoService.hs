@@ -151,7 +151,8 @@ verificaCadastroVeiculo cpfCliente = do
         verificaDisponibilidadeVaga veiculoCliente cpfCliente
     else do
         criaVeiculo
-        let veiculoCliente = head veiculoClienteList
+        veiculoCriadoList <- getVeiculo placaVeiculo
+        let veiculoCliente = head veiculoCriadoList
         verificaDisponibilidadeVaga veiculoCliente cpfCliente
 
 verificaDisponibilidadeVaga :: Veiculo -> String -> IO()

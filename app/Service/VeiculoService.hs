@@ -20,6 +20,7 @@ criaVeiculo = do
 
     let veiculo = Veiculo tipo placa cor
     addLinha (show veiculo) veiculoArq
+    putStrLn "Veiculo cadastrado com sucesso!"
 
 
 getVeiculo :: String -> IO [Veiculo]
