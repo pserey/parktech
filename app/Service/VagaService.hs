@@ -128,3 +128,11 @@ adicionaVagasAndarPorTipoVeiculo numeroAndar cont = do
   let vaga = Vaga False (num + 1) numeroAndar (buscaTipoVeiculo cont) now vId placaVeiculoVaga
   addLinha (show vaga) vagasArq
 
+
+  --- retorna o proximo tipo de vaga por tipo de veiculo
+buscaTipoVeiculo :: Int -> String
+buscaTipoVeiculo cont 
+  |cont >= 3 = "Carro"
+  |cont >= 1 = "Moto"
+  |otherwise = "Van"
+
