@@ -1,6 +1,5 @@
 module Model.Cliente where
     data Cliente = Cliente {
         cpf :: String,
-        nome :: String,
-        aceitaHistorico :: Bool
+        nome :: String
     } deriving (Show, Read)
