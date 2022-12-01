@@ -236,7 +236,8 @@ recomendaVaga clienteCpf veiculoCliente = do
         if null vagasHistorico then return Nothing
         else do
             vaga <- getVagaById $ elementoMaisComum vagasHistorico
-            return $ Just vaga
+            if Va.isOcupada vaga then return Nothing
+            else return $ Just vaga
 
 
 elementoMaisComum :: Ord a => [a] -> a
