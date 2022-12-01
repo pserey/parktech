@@ -6,8 +6,7 @@ import Util.InterfaceManager
 
 menuInicial :: IO()
 menuInicial = do
-    getTitulo
-    getLogin
+    putStrLn "\n--- FAÇA LOGIN ---"
     putStrLn "\n1 - Sou cliente"
     putStrLn "\n2 - Sou administrador"
     putStrLn "\n3 - Sair do sistema"
@@ -22,7 +21,7 @@ menuInicial = do
 
 menuAdministrador :: IO()
 menuAdministrador = do
-    getBemVindo
+    putStrLn "\n--- BEM VINDO! ---"
     putStrLn "\nEscolha o que você quer fazer: "
     putStrLn "\n1 - Adcionar vaga"
     putStrLn "\n2 - Adcionar andar"
@@ -35,7 +34,7 @@ menuAdministrador = do
 
 menuCliente :: IO()
 menuCliente = do
-    getBemVindo
+    putStrLn "\n--- BEM VINDO! ---"
     putStrLn "\nO estacionamento está funcionando! Escolha o que você quer fazer: "
     putStrLn "\n1 - Estacionar veiculo"
     putStrLn "\n2 - Pagar estacionamento"
@@ -81,4 +80,4 @@ opcaomenuCliente opcao
     
 exit :: IO()
 exit = do
-    getFinalizaSistema
+    putStrLn "Encerrando sessão"
