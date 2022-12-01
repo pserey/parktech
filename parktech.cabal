@@ -51,6 +51,7 @@ executable parktech-exe
       Service.VagaService
       Service.VeiculoService
       Util.DatabaseManager
+      Util.InterfaceManager
       Paths_parktech
   hs-source-dirs:
       app

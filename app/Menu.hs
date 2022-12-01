@@ -2,10 +2,12 @@ module Menu ( menuInicial, exit ) where
 
 import Service.VagaService
 import Service.EstacionamentoService
+import Util.InterfaceManager
 
 menuInicial :: IO()
 menuInicial = do
-    putStrLn "\n--- FAÇA LOGIN ---"
+    getTitulo
+    getLogin
     putStrLn "\n1 - Sou cliente"
     putStrLn "\n2 - Sou administrador"
     putStrLn "\n3 - Sair do sistema"
@@ -20,7 +22,7 @@ menuInicial = do
 
 menuAdministrador :: IO()
 menuAdministrador = do
-    putStrLn "\n--- BEM VINDO! ---"
+    getBemVindo
     putStrLn "\nEscolha o que você quer fazer: "
     putStrLn "\n1 - Adcionar vaga"
     putStrLn "\n2 - Adcionar andar"
@@ -33,7 +35,7 @@ menuAdministrador = do
 
 menuCliente :: IO()
 menuCliente = do
-    putStrLn "\n--- BEM VINDO! ---"
+    getBemVindo
     putStrLn "\nO estacionamento está funcionando! Escolha o que você quer fazer: "
     putStrLn "\n1 - Estacionar veiculo"
     putStrLn "\n2 - Pagar estacionamento"
@@ -79,4 +81,4 @@ opcaomenuCliente opcao
     
 exit :: IO()
 exit = do
-    putStrLn "Encerrando sessão"
+    getFinalizaSistema
